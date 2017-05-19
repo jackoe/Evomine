@@ -4,7 +4,10 @@ import java.util.Arrays;
 
 public class MineSweeper  {
     private Square[][] board;
-    
+   
+    /*
+     * Increments a square at an index if it's in bounds
+     */
     private void safeIncBoard(int x, int y)  {
         int len = board.length;
         if(x < len
@@ -15,14 +18,21 @@ public class MineSweeper  {
            board[x][y].value++;
         }
     }
-
+    
+    /* 
+     * Click on a square
+     */
     public int peek(int x, int y)  {
         Square peekingAt = board[x][y];
          peekingAt.shown = true;
          return peekingAt.value;
      }
 
-
+    /* 
+     * Make a minesweeper board
+     * @param sideLen The length of a given side.
+     * @param numMines The number of mines.
+     */
     MineSweeper(int sideLen, int numMines)  {
         board = new Square[sideLen][sideLen];
         Random mineLocGen = new Random();
