@@ -1,6 +1,7 @@
 import java.util.TreeSet;
 import java.util.Random;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class MineSweeper  {
     private Square[][] board;
@@ -77,19 +78,33 @@ public class MineSweeper  {
         }
     }
     
-    
-    public void play()  {
-        Minesweeper game = new Minesweeper(8, 10);
-        printBoard(false);
-        while(condition)  {
-            printBoard(false);
-            ge
+   /*
+    * Plays the game.
+    */
+    public static void play()  {
+        MineSweeper game = new MineSweeper(8, 10);
+        int lastClick = 0;
+        Scanner in = new Scanner(System.in);
+        
+        while(lastClick != -1)  {
+            game.printBoard(false);
+            System.out.println("Click:1 Flag:2");
+            int intType = in.nextInt();
+            System.out.println("First Coordinate");
+            int intX = in.nextInt();
+            System.out.println("Second Coordinate");
+            int intY = in.nextInt();
+            game.peek(intX, intY);
+            lastClick = game.peek(intX, intY);
+            
         }
         
     }
 
     public static void main(String[] args)  {
-        new MineSweeper(8, 10).printBoard(true);
+        play();
+        //new MineSweeper(8, 10).printBoard(true);
+        
     }
 
     /*
