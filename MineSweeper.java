@@ -17,10 +17,9 @@ public class MineSweeper  {
     }
 
 
-    MineSweeper(int sideLen)  {
+    MineSweeper(int sideLen, int numMines)  {
         board = new Square[sideLen][sideLen];
         Random mineLocGen = new Random();
-        int numMines = (sideLen * sideLen) / 5;
         TreeSet<Pair> coords = new TreeSet();
         
         while(coords.size() < numMines)  {
