@@ -16,6 +16,12 @@ public class MineSweeper  {
         }
     }
 
+    public int peek(int x, int y)  {
+        Square peekingAt = board[x][y];
+         peekingAt.shown = true;
+         return peekingAt.value;
+     }
+
 
     MineSweeper(int sideLen, int numMines)  {
         board = new Square[sideLen][sideLen];
