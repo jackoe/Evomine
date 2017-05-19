@@ -42,12 +42,16 @@ public class MineSweeper  {
             coords.add(new Pair(mineLocGen.nextInt(sideLen),
                                 mineLocGen.nextInt(sideLen)));
         }
-
+        
+        // fill every board with a blank square
         for(int i = 0; i < sideLen; i++)  {
             for(int j = 0; j < sideLen; j++)  {
                 board[i][j] = new Square(0);
             }
         }
+
+        // fills each bomb square with a -1
+        // increments all squares around them
         for(Pair p: coords)  {
             int x = p.fst;
             int y = p.snd;
@@ -59,6 +63,10 @@ public class MineSweeper  {
             }
         }
     }
+
+    /* 
+     * prints the board
+     */
     public void printBoard(boolean show)  {
         for(int i = 0; i < board.length; i++)  {
             for(int j = 0; j < board.length; j++)  {
@@ -69,20 +77,28 @@ public class MineSweeper  {
         }
     }
 
-
     public static void main(String[] args)  {
         new MineSweeper(8, 10).printBoard(true);
     }
 
+    /*
+     * Represents a pair of points
+     */
     private class Pair implements Comparable<Pair>  {
         public int fst;
         public int snd;
-
+        
+        /*
+         * make a pair
+         */
         Pair(int fst, int snd)  {
             this.fst = fst;
             this.snd = snd;
         }
 
+        /*
+         * Here so we can put pairs in a set
+         */
         public int compareTo(Pair othr)  {
             if(this.fst > othr.fst)  {
                 return 1;
@@ -105,6 +121,13 @@ public class MineSweeper  {
             return "[" + fst + ", " + snd + "]";
         }
     }
+
+    /*
+     * Represents a square on a board.
+     * A value of -1 represents a mine.
+     * Other values represent what the square would show if clicked.
+     * Shown is true if square has been clicked.
+     */
     private class Square  {
         public boolean shown;
         public int value;
