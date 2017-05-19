@@ -11,7 +11,7 @@ public class MineSweeper  {
         && y < len
         && x >= 0
         && y >= 0
-        && board[x][y].value < 9)  {
+        && board[x][y].value >= 0)  {
            board[x][y].value++;
         }
     }
@@ -35,7 +35,7 @@ public class MineSweeper  {
         for(Pair p: coords)  {
             int x = p.fst;
             int y = p.snd;
-            board[x][y].value = 9;
+            board[x][y].value = -1;
             for(int i = -1; i < 2; i++)  {
                 for(int j = -1; j < 2; j++)  {
                     safeIncBoard(x + i, y + j);
@@ -55,7 +55,7 @@ public class MineSweeper  {
 
 
     public static void main(String[] args)  {
-        new MineSweeper(10).printBoard(true);
+        new MineSweeper(8, 10).printBoard(true);
     }
 
     private class Pair implements Comparable<Pair>  {
@@ -99,12 +99,12 @@ public class MineSweeper  {
         }
 
         Square()  {
-            value = 9;
+            value = -1;
             shown = false;
         }
         
         public String toString()  {
-            return value == 9? "*": value + "";
+            return value == -1? "*": value + "";
         }
     }
 }
