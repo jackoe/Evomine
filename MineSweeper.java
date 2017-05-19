@@ -68,7 +68,17 @@ public class MineSweeper  {
             System.out.println("");
         }
     }
-
+    
+    
+    public void play()  {
+        Minesweeper game = new Minesweeper(8, 10);
+        printBoard(false);
+        while(condition)  {
+            printBoard(false);
+            ge
+        }
+        
+    }
 
     public static void main(String[] args)  {
         new MineSweeper(8, 10).printBoard(true);
