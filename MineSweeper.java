@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class MineSweeper  {
+    // the board
     private Square[][] board;
    
     /*
@@ -20,14 +21,32 @@ public class MineSweeper  {
         }
     }
     
+    /*
+     * reveales the blob of zeros 
+    private void revealZeros(int x, int y) {
+        if(board[x][y].value == 0)  {
+            board[x][y].shown = true;
+            revealZeros(x - 1, y - 1);
+            revealZeros(x    , y - 1);
+            revealZeros(x    , y    );
+            revealZeros(x + 1, y    );
+            revealZeros(x + 1, y + 1);
+        }
+    }
+
     /* 
      * Click on a square
      */
     public int peek(int x, int y)  {
-        Square peekingAt = board[x][y];
+         Square peekingAt = board[x][y];
          peekingAt.shown = true;
+         revealZero
          return peekingAt.value;
      }
+
+    public void flag(int x, int y)  {
+        board[x][y].flagged = true;
+    }
 
     /* 
      * Make a minesweeper board
@@ -156,20 +175,28 @@ public class MineSweeper  {
      */
     private class Square  {
         public boolean shown;
+        public boolean flagged;
         public int value;
 
         Square(int sqNumber)  {
             value = sqNumber;
             shown = false;
+            flagged = false;
         }
 
         Square()  {
-            value = -1;
-            shown = false;
+            Square(-1);
         }
         
         public String toString()  {
-            return value == -1? "*": value + "";
+            if(flagged)
+                return "F";
+            else if(shown && value == -1)
+                return "*"
+            else if(shown)
+                return value;
+            else 
+                return " ";
         }
     }
 }
