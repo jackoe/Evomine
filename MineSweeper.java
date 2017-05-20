@@ -17,7 +17,7 @@ public class MineSweeper  {
      * Increments a square at an index if it's in bounds
      */
     private void safeIncBoard(int x, int y)  {
-        if(inBounds(x, y) && !board[x][y].value >= 0)  {
+        if(inBounds(x, y) && board[x][y].value >= 0)  {
             board[x][y].value++;
         }
     }
@@ -144,6 +144,7 @@ public class MineSweeper  {
                 game.flag(x, y);
             }
         }
+        System.out.println("you LOST");
         game.printBoard(true);
     }
 
