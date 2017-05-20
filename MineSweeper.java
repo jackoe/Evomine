@@ -108,7 +108,7 @@ public class MineSweeper  {
         for(int i = 0; i < board.length; i++)  {
             for(int j = 0; j < board.length; j++)  {
                 Square curr = board[i][j];
-                System.out.print(show || curr.shown? board[i][j]: " ");
+                System.out.print(curr);
             }
             System.out.println("");
         }
@@ -130,13 +130,11 @@ public class MineSweeper  {
             int x = in.nextInt();
             System.out.println("Second Coordinate");
             int y = in.nextInt();
-            if(type == 1){
+            if(type == 1)  {
                 System.err.println("Clicking at (" + x + ", " + y + ")");
                 game.peek(x, y);
                 lastClick = game.peek(x, y);
-            }
-            else{
-                lastClick = 0;
+            } else  {
                 System.err.println("Flagging at (" + x + ", " + y + ")");
                 game.flag(x, y);
             }
