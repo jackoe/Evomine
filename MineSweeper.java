@@ -7,6 +7,14 @@ public class MineSweeper  {
     // the board
     private Square[][] board;
    
+
+
+    public boolean inBounds(int x, int y)  {
+        return x < board.length
+            || y < board.length
+            || x >= 0
+            || y >= 0;
+    }
     /*
      * Increments a square at an index if it's in bounds
      */
@@ -27,13 +35,9 @@ public class MineSweeper  {
      */
     private void revealZeros(int x, int y) {
         // catch the out of bounds
-        if(x >= board.length
-        || y >= board.length
-        || x <= 0
-        || y <= 0)  {
+        if(!inBounds(x, y))  {
             return;
         }
-
         // if it isn't already shown or flagged
         if(!board[x][y].shown
         && !board[x][y].flagged)  {
@@ -61,8 +65,7 @@ public class MineSweeper  {
      * flags a mine
      */
     public void flag(int x, int y)  {
-          
-       board[x][y].flagged = !board[x][y].flagged;
+        board[x][y].flagged = !board[x][y].flagged;
     }
 
     /* 
@@ -105,6 +108,7 @@ public class MineSweeper  {
      * prints the board
      */
     public void printBoard(boolean show)  {
+        System.out.println("-------------");
         for(int i = 0; i < board.length; i++)  {
             for(int j = 0; j < board.length; j++)  {
                 Square curr = board[i][j];
@@ -112,6 +116,7 @@ public class MineSweeper  {
             }
             System.out.println("");
         }
+        System.out.println("-------------");
     }
     
    /*
