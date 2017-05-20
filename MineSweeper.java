@@ -9,9 +9,9 @@ public class MineSweeper  {
     
     public boolean inBounds(int x, int y)  {
         return x < board.length
-            || y < board.length
-            || x >= 0
-            || y >= 0;
+            && y < board.length
+            && x >= 0
+            && y >= 0;
     }
     /*
      * Increments a square at an index if it's in bounds
@@ -130,7 +130,7 @@ public class MineSweeper  {
             System.out.println("First Coordinate");
             x = in.nextInt();
             System.out.println("Second Coordinate");
-            int y = in.nextInt();
+            y = in.nextInt();
             
             if(!game.inBounds(x, y))  {
                 System.out.println("That's out of bounds");
@@ -150,8 +150,6 @@ public class MineSweeper  {
 
     public static void main(String[] args)  {
         play();
-        //new MineSweeper(8, 10).printBoard(true);
-        
     }
 
     /*
