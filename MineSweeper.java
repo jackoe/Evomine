@@ -31,7 +31,8 @@ public class MineSweeper  {
          && y >= 0))  {
             return;
         }
-        if(board[x][y].value == 0)  {
+        if(board[x][y].value == 0
+       && !board[x][y].shown)  {
             board[x][y].shown = true;
             revealZeros(x - 1, y - 1);
             revealZeros(x    , y - 1);
