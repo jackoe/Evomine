@@ -36,11 +36,11 @@ public class MineSweeper  {
         && !board[x][y].flagged)  {
             board[x][y].shown = true;
             if(board[x][y].value == 0)  {
-                revealZeros(x - 1, y - 1);
-                revealZeros(x    , y - 1);
-                revealZeros(x    , y    );
-                revealZeros(x + 1, y    );
-                revealZeros(x + 1, y + 1);
+                for(int i = -1; i < 2; i++)  {
+                    for(int j = -1; j < 2; j++)  {
+                        revealZeros(x + i, y + j);
+                    }
+                }
             }
         }
     }
