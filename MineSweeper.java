@@ -7,6 +7,7 @@ public class MineSweeper  {
     // the board
     private Square[][] board;
     public int decrementer = 0;
+
     
     /*
      * Returns true if x and y are in bounds.
@@ -125,6 +126,27 @@ public class MineSweeper  {
             System.out.println("");
         }
     }
+    //caluclates fitness
+    public int fitnessCalc(){
+        int fitness = 0;
+        for(int i = 0; i < board.length; i++)  {
+            for(int j = 0; j < board.length; j++)  {
+                Square curr = board[i][j];
+                if (board[i][j].flagged) {
+                    if (board[i][j].value == -1) {
+                        fitness++;
+                    }
+                    else {
+                        fitness--;
+                    }    
+                    
+                    
+                }
+            }
+            
+        }
+        return fitness;
+    }
     
    /*
     * Plays the game.
@@ -155,18 +177,24 @@ public class MineSweeper  {
                 System.err.println("Clicking at (" + x + ", " + y + ")");
                 game.peek(x, y);
                 lastClick = game.peek(x, y);
-            } else  {
+            } 
+            else  {
                 System.err.println("Flagging at (" + x + ", " + y + ")");
                 game.flag(x, y);
             }
         }
         System.out.println("you LOST");
         game.printBoard(true);
+        System.out.println("Fitness: " + game.fitnessCalc());
     }
+
+    
 
     public static void main(String[] args)  {
         play();
     }
+
+
 
     /*
      * Represents a pair of points
