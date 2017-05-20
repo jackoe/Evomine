@@ -55,6 +55,10 @@ public class MineSweeper  {
      * Click on a square
      */
     public int peek(int x, int y)  {
+        if(board[x][y].flagged)  {
+            return -2;
+        }
+
         Square peekingAt = board[x][y];
         if(!peekingAt.shown)  {
             revealZeros(x, y);
@@ -85,7 +89,7 @@ public class MineSweeper  {
     MineSweeper(int sideLen, int numMines)  {
         board = new Square[sideLen][sideLen];
         Random mineLocGen = new Random();
-        TreeSet<Pair> coords = new TreeSet();
+        TreeSet<Pair> coords = new TreeSet<Pair>();
         decrementer = numMines;
         
         while(coords.size() < numMines)  {
