@@ -61,7 +61,8 @@ public class MineSweeper  {
      * flags a mine
      */
     public void flag(int x, int y)  {
-        board[x][y].flagged = !board[x][y].flagged;
+          
+       board[x][y].flagged = !board[x][y].flagged;
     }
 
     /* 
