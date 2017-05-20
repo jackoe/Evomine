@@ -27,10 +27,10 @@ public class MineSweeper  {
      */
     private void revealZeros(int x, int y) {
         // catch the out of bounds
-        if(!(x < board.length
-          && y < board.length
-          && x >= 0
-          && y >= 0))  {
+        if(x >= board.length
+        || y >= board.length
+        || x <= 0
+        || y <= 0)  {
             return;
         }
 
@@ -140,11 +140,7 @@ public class MineSweeper  {
                 System.err.println("Flagging at (" + x + ", " + y + ")");
                 game.flag(x, y);
             }
-            
-            
-            
         }
-        
     }
 
     public static void main(String[] args)  {
