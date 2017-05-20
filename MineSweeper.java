@@ -22,23 +22,29 @@ public class MineSweeper  {
     }
     
     /*
-     * reveales the blob of zeros 
+     * Reveales the blob of zeros
+     * Also revealed the nonzeros around said blob.
      */
     private void revealZeros(int x, int y) {
-       if(!(x < board.length
-         && y < board.length
-         && x >= 0
-         && y >= 0))  {
+        // catch the out of bounds
+        if(!(x < board.length
+          && y < board.length
+          && x >= 0
+          && y >= 0))  {
             return;
         }
-        if(board[x][y].value == 0
-       && !board[x][y].shown)  {
+
+        // if it isn't already shown or flagged
+        if(!board[x][y].shown
+        && !board[x][y].flagged)  {
             board[x][y].shown = true;
-            revealZeros(x - 1, y - 1);
-            revealZeros(x    , y - 1);
-            revealZeros(x    , y    );
-            revealZeros(x + 1, y    );
-            revealZeros(x + 1, y + 1);
+            if(board[x][y].value == 0)  {
+                revealZeros(x - 1, y - 1);
+                revealZeros(x    , y - 1);
+                revealZeros(x    , y    );
+                revealZeros(x + 1, y    );
+                revealZeros(x + 1, y + 1);
+            }
         }
     }
 
@@ -51,9 +57,11 @@ public class MineSweeper  {
          revealZeros(x, y);
          return peekingAt.value;
      }
-
+    /*
+     * flags a mine
+     */
     public void flag(int x, int y)  {
-        board[x][y].flagged = true;
+        board[x][y].flagged = !board[x][y].flagged;
     }
 
     /* 
