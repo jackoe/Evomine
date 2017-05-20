@@ -135,6 +135,7 @@ public class MineSweeper  {
             }
             else{
                 game.flag(intX,intY);
+                lastClick = 0;
             }
             
             
