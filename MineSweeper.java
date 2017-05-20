@@ -8,6 +8,10 @@ public class MineSweeper  {
     private Square[][] board;
     public int decrementer = 0;
     
+    /*
+     * Returns true if x and y are in bounds.
+     * false otherwise
+     */
     public boolean inBounds(int x, int y)  {
         return x < board.length
             && y < board.length
@@ -60,6 +64,9 @@ public class MineSweeper  {
      * flags a mine
      */
     public void flag(int x, int y)  {
+        if(board[x][y].shown)  {
+            return;
+        }
         board[x][y].flagged = !board[x][y].flagged;
         if(board[x][y].flagged){
             decrementer--;
@@ -213,16 +220,26 @@ public class MineSweeper  {
         public boolean flagged;
         public int value;
 
+        /*
+         * constructor, pass -1 for mine, otherwise pass value
+         */
         Square(int sqNumber)  {
             value = sqNumber;
             shown = false;
             flagged = false;
         }
+
+        /*
+         * Alternate toString method
+         * @param ignoreShown reveal even if hasn't been clicked
+         */
         public String toString(boolean ignoreShown)  {
             boolean show = shown || ignoreShown;
             
             if(flagged)
                 return "F";
+            else if(shown && value == -1)
+                return "#";
             else if(show && value == -1)
                 return "*";
             else if(show)
@@ -230,7 +247,11 @@ public class MineSweeper  {
             else 
                 return " ";
         }
-        
+        /*
+         * prints * if mine
+         * prints blank space if not revealed
+         * prints number if revealed
+         */
         public String toString()  {
             return toString(false);
         }
