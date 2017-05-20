@@ -6,9 +6,7 @@ import java.util.Scanner;
 public class MineSweeper  {
     // the board
     private Square[][] board;
-   
-
-
+    
     public boolean inBounds(int x, int y)  {
         return x < board.length
             || y < board.length
@@ -19,13 +17,8 @@ public class MineSweeper  {
      * Increments a square at an index if it's in bounds
      */
     private void safeIncBoard(int x, int y)  {
-        int len = board.length;
-        if(x < len
-        && y < len
-        && x >= 0
-        && y >= 0
-        && board[x][y].value >= 0)  {
-           board[x][y].value++;
+        if(inBounds(x, y)  {
+            board[x][y].value++;
         }
     }
     
@@ -129,13 +122,20 @@ public class MineSweeper  {
         int x,y;
         
         while(lastClick != -1)  {
+            
+            // get input from user
             game.printBoard(false);
             System.out.println("Click:1 Flag:2");
             int type = in.nextInt();
             System.out.println("First Coordinate");
             x = in.nextInt();
             System.out.println("Second Coordinate");
-            y = in.nextInt();
+            int y = in.nextInt();
+            
+            if(!inBounds(x, y)  {
+                System.out.println("That's out of bounds");
+                continue;
+            }
             if(type == 1)  {
                 System.err.println("Clicking at (" + x + ", " + y + ")");
                 game.peek(x, y);
