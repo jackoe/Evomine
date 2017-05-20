@@ -121,8 +121,15 @@ public class MineSweeper  {
             int intX = in.nextInt();
             System.out.println("Second Coordinate");
             int intY = in.nextInt();
-            game.peek(intX, intY);
-            lastClick = game.peek(intX, intY);
+            if(intType == 1){
+                game.peek(intX, intY);
+                lastClick = game.peek(intX, intY);
+            }
+            else{
+                game.flag(intX,intY);
+            }
+            
+            
             
         }
         
