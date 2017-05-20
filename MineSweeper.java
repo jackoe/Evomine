@@ -17,7 +17,7 @@ public class MineSweeper  {
      * Increments a square at an index if it's in bounds
      */
     private void safeIncBoard(int x, int y)  {
-        if(inBounds(x, y)  {
+        if(inBounds(x, y))  {
             board[x][y].value++;
         }
     }
@@ -105,7 +105,7 @@ public class MineSweeper  {
         for(int i = 0; i < board.length; i++)  {
             for(int j = 0; j < board.length; j++)  {
                 Square curr = board[i][j];
-                System.out.print(curr);
+                System.out.print(curr.toString(show));
             }
             System.out.println("");
         }
@@ -132,7 +132,7 @@ public class MineSweeper  {
             System.out.println("Second Coordinate");
             int y = in.nextInt();
             
-            if(!inBounds(x, y)  {
+            if(!game.inBounds(x, y))  {
                 System.out.println("That's out of bounds");
                 continue;
             }
@@ -211,9 +211,9 @@ public class MineSweeper  {
             shown = false;
             flagged = false;
         }
-
-        
-        public String toString()  {
+        public String toString(boolean ignoreShown)  {
+            boolean show = shown || ignoreShown;
+            
             if(flagged)
                 return "F";
             else if(shown && value == -1)
@@ -222,6 +222,10 @@ public class MineSweeper  {
                 return value + "";
             else 
                 return " ";
+        }
+        
+        public String toString()  {
+            return toString(false);
         }
     }
 }
