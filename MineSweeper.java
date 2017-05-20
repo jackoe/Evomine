@@ -17,7 +17,7 @@ public class MineSweeper  {
      * Increments a square at an index if it's in bounds
      */
     private void safeIncBoard(int x, int y)  {
-        if(inBounds(x, y))  {
+        if(inBounds(x, y) && !board[x][y].value >= 0)  {
             board[x][y].value++;
         }
     }
@@ -49,9 +49,11 @@ public class MineSweeper  {
      * Click on a square
      */
     public int peek(int x, int y)  {
-         Square peekingAt = board[x][y];
-         revealZeros(x, y);
-         return peekingAt.value;
+        Square peekingAt = board[x][y];
+        if(!peekingAt.shown)  {
+            revealZeros(x, y);
+        }
+        return peekingAt.value;
      }
     /*
      * flags a mine
