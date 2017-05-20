@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class MineSweeper  {
     // the board
     private Square[][] board;
+    public int decrementer = 0;
     
     public boolean inBounds(int x, int y)  {
         return x < board.length
@@ -60,6 +61,12 @@ public class MineSweeper  {
      */
     public void flag(int x, int y)  {
         board[x][y].flagged = !board[x][y].flagged;
+        if(board[x][y].flagged){
+            decrementer--;
+        }
+        else{
+            decrementer++;
+        }
     }
 
     /* 
@@ -71,6 +78,7 @@ public class MineSweeper  {
         board = new Square[sideLen][sideLen];
         Random mineLocGen = new Random();
         TreeSet<Pair> coords = new TreeSet();
+        decrementer = numMines;
         
         while(coords.size() < numMines)  {
             coords.add(new Pair(mineLocGen.nextInt(sideLen),
@@ -123,6 +131,7 @@ public class MineSweeper  {
         while(lastClick != -1)  {
             
             // get input from user
+            System.out.println(game.decrementer + " Mines Remaining");
             game.printBoard(false);
             System.out.println("Click:1 Flag:2");
             int type = in.nextInt();
