@@ -23,6 +23,7 @@ public class MineSweeper  {
     
     /*
      * reveales the blob of zeros 
+     */
     private void revealZeros(int x, int y) {
         if(board[x][y].value == 0)  {
             board[x][y].shown = true;
@@ -40,7 +41,7 @@ public class MineSweeper  {
     public int peek(int x, int y)  {
          Square peekingAt = board[x][y];
          peekingAt.shown = true;
-         revealZero
+         revealZeros(x, y);
          return peekingAt.value;
      }
 
@@ -184,17 +185,14 @@ public class MineSweeper  {
             flagged = false;
         }
 
-        Square()  {
-            Square(-1);
-        }
         
         public String toString()  {
             if(flagged)
                 return "F";
             else if(shown && value == -1)
-                return "*"
+                return "*";
             else if(shown)
-                return value;
+                return value + "";
             else 
                 return " ";
         }
