@@ -50,7 +50,6 @@ public class MineSweeper  {
      */
     public int peek(int x, int y)  {
          Square peekingAt = board[x][y];
-         peekingAt.shown = true;
          revealZeros(x, y);
          return peekingAt.value;
      }
@@ -101,7 +100,6 @@ public class MineSweeper  {
      * prints the board
      */
     public void printBoard(boolean show)  {
-        System.out.println("-------------");
         for(int i = 0; i < board.length; i++)  {
             for(int j = 0; j < board.length; j++)  {
                 Square curr = board[i][j];
@@ -109,7 +107,6 @@ public class MineSweeper  {
             }
             System.out.println("");
         }
-        System.out.println("-------------");
     }
     
    /*
