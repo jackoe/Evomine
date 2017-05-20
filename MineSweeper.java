@@ -121,15 +121,16 @@ public class MineSweeper  {
         MineSweeper game = new MineSweeper(8, 10);
         int lastClick = 0;
         Scanner in = new Scanner(System.in);
+        int x,y;
         
         while(lastClick != -1)  {
             game.printBoard(false);
             System.out.println("Click:1 Flag:2");
             int type = in.nextInt();
             System.out.println("First Coordinate");
-            int x = in.nextInt();
+            x = in.nextInt();
             System.out.println("Second Coordinate");
-            int y = in.nextInt();
+            y = in.nextInt();
             if(type == 1)  {
                 System.err.println("Clicking at (" + x + ", " + y + ")");
                 game.peek(x, y);
@@ -139,6 +140,7 @@ public class MineSweeper  {
                 game.flag(x, y);
             }
         }
+        game.printBoard(true);
     }
 
     public static void main(String[] args)  {
