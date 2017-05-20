@@ -25,6 +25,12 @@ public class MineSweeper  {
      * reveales the blob of zeros 
      */
     private void revealZeros(int x, int y) {
+       if(!(x < board.length
+         && y < board.length
+         && x >= 0
+         && y >= 0))  {
+            return;
+        }
         if(board[x][y].value == 0)  {
             board[x][y].shown = true;
             revealZeros(x - 1, y - 1);
