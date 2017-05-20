@@ -213,9 +213,9 @@ public class MineSweeper  {
             
             if(flagged)
                 return "F";
-            else if(shown && value == -1)
+            else if(show && value == -1)
                 return "*";
-            else if(shown)
+            else if(show)
                 return value + "";
             else 
                 return " ";
