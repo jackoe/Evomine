@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class MineSweeper  {
+
     // the board
     private Square[][] board;
     public int decrementer = 0;
@@ -192,10 +193,106 @@ public class MineSweeper  {
         System.out.println("Fitness: " + game.fitnessCalc());
     }
 
+    public static void play2() {
+    MineSweeper game = new MineSweeper(8, 10);
+    int lastClick = 0;
+    //Pair coords = new Pair(0,0);
+   
+        
+    while(lastClick != -1)  {
+        boolean frontier[]= new boolean[64] ;
+      
+        
+        int a = 0;
+              
+        int x = 0;
+        int y= 0;
+
+        int d=0;
+        int e=0;
+
+        System.out.println(game.decrementer + " Mines Remaining");
+        game.printBoard(false);
+       
+        game.peek(x,y);
+        lastClick = game.board[x][y].value;
+            for (int q=0; q<8; q++){
+                for (int r=0; r<8; r++){
+        if(game.board[q][r].shown)  {
+                boolean breakbool = true;
+                for(int i = -1; i < 2 && breakbool; i++)  {
+                    for(int j = -1; j < 2 && breakbool; j++)  {
+                        if(game.inBounds(x+i, y+j) && !game.board[x+i][y+j].shown)  {
+                            frontier[a] = true;
+                            a++;
+                            breakbool = false;
+                        }
+                    }
+                    
+                }
+
+                
+                //coords =  new Pair(x, y);
+                if(a!=0)  {
+                    System.out.println(frontier[a-1] + " Last Frontier ");
+                }
+
+            for(int c=0; c<64;c++)
+                if(frontier[c]){
+                    d = c%8;
+                    e = (c-d)/8;
+
+
+
+                    //Strategy Methods
+                    game.check1(d,e);
+                }
+            }
+
+            }
+            
+
+
+            }
+            System.out.println("you LOST");
+            game.printBoard(true);
+            System.out.println("Fitness: " + game.fitnessCalc());
+        }
+}
+
+
+    public boolean check1(int d, int e) {
+        int b = 0;
+        int h = 0;
+        int xadj[]= new int[8] ;
+        int yadj[]= new int[8] ;
+        for(int i = -1; i < 2 ; i++)  {
+            for(int j = -1; j < 2 ; j++)  {
+                if(inBounds(d+i, e+j) && board[d+i][e+j].shown)  {
+                    b++;
+                    xadj[h]= d+i;
+                    yadj[h]= e+j;
+                    h++;
+                }
+            }
+        }
+
+
+        if (board[d][e].value == b)  {
+            for (int i=0; i<8; i++)  {
+                if(xadj[i] != null)  {
+                    game.flag(xadj[i], yadj[i]);
+
+                }
+            }
+        }  
+    }
+    
+
     
 
     public static void main(String[] args)  {
-        play();
+        play2();
     }
 
 
@@ -289,3 +386,4 @@ public class MineSweeper  {
         }
     }
 }
+
