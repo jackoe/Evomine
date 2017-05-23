@@ -7,7 +7,7 @@ public class MineSweeper  {
 
     // the board
     private Square[][] board;
-    public int decrementer = 0;
+    public int numMinesLeft;
 
     
     /*
@@ -35,19 +35,22 @@ public class MineSweeper  {
      */
     private void revealZeros(int x, int y) {
         // catch the out of bounds
-        if(!inBounds(x, y))  {
+        // // if it isn't already shown or flagged
+        if(!inBounds(x, y)
+        && !board[x][y].shown
+        && !board[x][y].flagged)  {
             return;
         }
-        // if it isn't already shown or flagged
-        if(!board[x][y].shown
-        && !board[x][y].flagged)  {
-            board[x][y].shown = true;
-            if(board[x][y].value == 0)  {
-                for(int i = -1; i < 2; i++)  {
-                    for(int j = -1; j < 2; j++)  {
-                        revealZeros(x + i, y + j);
-                    }
-                }
+        
+        board[x][y].shown = true;
+        // we reveal but don't recurse on nonzeros
+        if(board[x][y].value != 0)  {
+            return;
+        }
+        
+        for(int i = -1; i < 2; i++)  {
+            for(int j = -1; j < 2; j++)  {
+                revealZeros(x + i, y + j);
             }
         }
     }
@@ -56,6 +59,7 @@ public class MineSweeper  {
      * Click on a square
      */
     public int peek(int x, int y)  {
+        // We don't allow clicking on flagged squares
         if(board[x][y].flagged)  {
             return -2;
         }
@@ -68,21 +72,20 @@ public class MineSweeper  {
      }
     /*
      * flags a mine
+     * @param x the x coord
+     * @param y the y coord
      */
     public void flag(int x, int y)  {
+        // We don't allow flagging revealed squares
         if(board[x][y].shown)  {
             return;
         }
-        board[x][y].flagged = !board[x][y].flagged;
-        if(board[x][y].flagged){
-            decrementer--;
-        }
-        else{
-            decrementer++;
-        }
+        Square curr = board[x][y];
+        curr.flagged = !curr.flagged;
+        numMinesLeft += curr.flagged? 1: -1;
     }
 
-    /* 
+    /*
      * Make a minesweeper board
      * @param sideLen The length of a given side.
      * @param numMines The number of mines.
@@ -91,7 +94,7 @@ public class MineSweeper  {
         board = new Square[sideLen][sideLen];
         Random mineLocGen = new Random();
         TreeSet<Pair> coords = new TreeSet<Pair>();
-        decrementer = numMines;
+        numMinesLeft = numMines;
         
         while(coords.size() < numMines)  {
             coords.add(new Pair(mineLocGen.nextInt(sideLen),
@@ -131,7 +134,9 @@ public class MineSweeper  {
             System.out.println("");
         }
     }
-    //caluclates fitness
+    /*
+     * Calculates fitness by #true flags - #false flags
+     */
     public int fitnessCalc(){
         int fitness = 0;
         for(int i = 0; i < board.length; i++)  {
@@ -144,16 +149,13 @@ public class MineSweeper  {
                     else {
                         fitness--;
                     }    
-                    
-                    
                 }
             }
-            
         }
         return fitness;
     }
-    
-   /*
+   
+    /*
     * Plays the game.
     */
     public static void play()  {
@@ -165,25 +167,22 @@ public class MineSweeper  {
         while(lastClick != -1)  {
             
             // get input from user
-            System.out.println(game.decrementer + " Mines Remaining");
+            System.out.println(game.numMinesLeft + " Mines Remaining");
             game.printBoard(false);
             System.out.println("Click:1 Flag:2");
             int type = in.nextInt();
-            System.out.println("First Coordinate");
+            System.out.print("First Coordinate: ");
             x = in.nextInt();
-            System.out.println("Second Coordinate");
+            System.out.print("Second Coordinate: ");
             y = in.nextInt();
-            
             if(!game.inBounds(x, y))  {
                 System.out.println("That's out of bounds");
                 continue;
             }
             if(type == 1)  {
                 System.err.println("Clicking at (" + x + ", " + y + ")");
-                game.peek(x, y);
                 lastClick = game.peek(x, y);
-            } 
-            else  {
+            }  else  {
                 System.err.println("Flagging at (" + x + ", " + y + ")");
                 game.flag(x, y);
             }
