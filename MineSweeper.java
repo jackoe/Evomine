@@ -264,30 +264,26 @@ public class MineSweeper  {
 
     public boolean check1(int d, int e) {
         int b = 0;
-        int h = 0;
-        int xadj[]= new int[8] ;
-        int yadj[]= new int[8] ;
-        for(int i = -1; i < 2 ; i++)  {
-            for(int j = -1; j < 2 ; j++)  {
-                if(inBounds(d+i, e+j) && board[d+i][e+j].shown)  {
-                    b++;
-                    xadj[h]= d+i;
-                    yadj[h]= e+j;
-                    h++;
-                }
+        
+        for (Square sq : getNeighBors(d,e)) {
+            if(sq.shown) {
+                b++;
+
             }
         }
-
+        
+                            }
+        }
 
         if (board[d][e].value == b)  {
-            for (int i=0; i<8; i++)  {
-                if(xadj[i] != null)  {
-                    flag(xadj[i], yadj[i]);
+            for (Square sq : getNeighBors(d,e)) {
+            if(sq.shown) {
+                    flag(sq[i],sq[j]);
 
                 }
             }
         }  
-    }
+    
     
     public List<Square>getNeighBors(int x, int y)  {
         List<Square> neighbors = new LinkedList();
