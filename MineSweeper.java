@@ -2,6 +2,8 @@ import java.util.TreeSet;
 import java.util.Random;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MineSweeper  {
 
@@ -210,7 +212,7 @@ public class MineSweeper  {
         int d=0;
         int e=0;
 
-        System.out.println(game.decrementer + " Mines Remaining");
+        System.out.println(game.numMinesLeft + " Mines Remaining");
         game.printBoard(false);
        
         game.peek(x,y);
@@ -280,14 +282,24 @@ public class MineSweeper  {
         if (board[d][e].value == b)  {
             for (int i=0; i<8; i++)  {
                 if(xadj[i] != null)  {
-                    game.flag(xadj[i], yadj[i]);
+                    flag(xadj[i], yadj[i]);
 
                 }
             }
         }  
     }
     
-
+    public List<Square>getNeighBors(int x, int y)  {
+        List<Square> neighbors = new LinkedList();
+        for(int i = -1; i < 2; i++)  {
+            for(int j = -1; j < 2; j++)  {
+                if(inBounds(i,j))  {
+                    neighbors.add(board[i][j]);
+                }
+            }
+        }
+        return neighbors;
+    }
     
 
     public static void main(String[] args)  {
@@ -343,7 +355,7 @@ public class MineSweeper  {
      * Other values represent what the square would show if clicked.
      * Shown is true if square has been clicked.
      */
-    private class Square  {
+    public class Square  {
         public boolean shown;
         public boolean flagged;
         public int value;
