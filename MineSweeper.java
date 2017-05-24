@@ -39,8 +39,8 @@ public class MineSweeper  {
         // catch the out of bounds
         // // if it isn't already shown or flagged
         if(!inBounds(x, y)
-        && !board[x][y].shown
-        && !board[x][y].flagged)  {
+        || !board[x][y].shown
+        ||  board[x][y].flagged)  {
             return;
         }
         
@@ -195,76 +195,68 @@ public class MineSweeper  {
     }
 
     public static void play2() {
-    MineSweeper game = new MineSweeper(8, 10);
-    int lastClick = 0;
-    //Pair coords = new Pair(0,0);
-   
-        
-    while(lastClick != -1)  {
-        boolean frontier[]= new boolean[64] ;
-      
-        
-        int a = 0;
-              
-        int x = 0;
-        int y= 0;
-
-        int d=0;
-        int e=0;
-
-        System.out.println(game.numMinesLeft + " Mines Remaining");
-        game.printBoard(false);
+        MineSweeper game = new MineSweeper(8, 10);
+        int lastClick = 0;
+        //Pair coords = new Pair(0,0);
        
-        game.peek(x,y);
-        lastClick = game.board[x][y].value;
-            for (int q=0; q<8; q++){
-                for (int r=0; r<8; r++){
-        if(game.board[q][r].shown)  {
-                boolean breakbool = true;
-                for(int i = -1; i < 2 && breakbool; i++)  {
-                    for(int j = -1; j < 2 && breakbool; j++)  {
-                        if(game.inBounds(x+i, y+j) && !game.board[x+i][y+j].shown)  {
-                            frontier[a] = true;
-                            a++;
-                            breakbool = false;
+            
+        while(lastClick != -1)  {
+            boolean frontier[]= new boolean[64] ;  
+            int a = 0;
+                  
+            int x = 0;
+            int y = 0;
+
+            int d = 0;
+            int e = 0;
+
+            System.out.println(game.numMinesLeft + " Mines Remaining");
+            game.printBoard(false);
+           
+            game.peek(x, y);
+            lastClick = game.board[x][y].value;
+            System.out.println("LastClick "+ lastClick);
+            for (int q=0; q<8; q++)  {
+                for (int r=0; r<8; r++)  {
+                    if(game.board[q][r].shown)  {
+                        boolean breakbool = true;
+                        for(int i = -1; i < 2 && breakbool; i++)  {
+                            for(int j = -1; j < 2 && breakbool; j++)  {
+                                if(game.inBounds(x+i, y+j) && !game.board[x+i][y+j].shown)  {
+                                    frontier[a] = true;
+                                    a++;
+                                    breakbool = false;
+                                }
+                            }
+                        } 
+                        //coords =  new Pair(x, y);
+                        if(a!=0)  {
+                            System.out.println(frontier[a-1] + " Last Frontier ");
+                        }
+
+                        
+                        System.out.println("Hello Hello Hello");
+                        for(int c=0; c<64;c++){
+                            System.out.println("Hello");
+                            if(frontier[c]){
+                                System.out.println("Frontier List"+ c);
+                                d = c%8;
+                                e = (c-d)/8;
+                                //Strategy Methods
+                                game.check1(d,e);
+                            }
                         }
                     }
-                    
                 }
-
-                
-                //coords =  new Pair(x, y);
-                if(a!=0)  {
-                    System.out.println(frontier[a-1] + " Last Frontier ");
-                }
-
-            for(int c=0; c<64;c++)
-                if(frontier[c]){
-                    d = c%8;
-                    e = (c-d)/8;
-
-
-
-                    //Strategy Methods
-                    game.check1(d,e);
-                }
-            }
-
-            }
-            
-
-
-            }
-            System.out.println("you LOST");
-            game.printBoard(true);
-            System.out.println("Fitness: " + game.fitnessCalc());
+            } 
         }
-}
+        System.out.println("you LOST");
+        game.printBoard(true);
+        System.out.println("Fitness: " + game.fitnessCalc());
+    }
 
-
-    public boolean check1(int d, int e) {
+    public void check1(int d, int e) {
         int b = 0;
-        
         for (Square sq : getNeighBors(d,e)) {
             if(sq.shown) {
                 b++;
@@ -272,25 +264,21 @@ public class MineSweeper  {
             }
         }
         
-                            }
-        }
-
         if (board[d][e].value == b)  {
             for (Square sq : getNeighBors(d,e)) {
             if(sq.shown) {
-                    flag(sq[i],sq[j]);
-
+                    sq.flagged = true;
                 }
             }
         }  
-    
-    
+    }    
     public List<Square>getNeighBors(int x, int y)  {
         List<Square> neighbors = new LinkedList();
         for(int i = -1; i < 2; i++)  {
             for(int j = -1; j < 2; j++)  {
                 if(inBounds(i,j))  {
                     neighbors.add(board[i][j]);
+                    System.out.println(x+" "+y);
                 }
             }
         }
