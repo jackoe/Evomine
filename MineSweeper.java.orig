@@ -44,8 +44,15 @@ public class MineSweeper  {
      */
     private void revealZeros(int x, int y) {
         // catch the out of bounds
+<<<<<<< 47b825fa28627878b6ecdc8266777a500a36cf85
+        // // if it isn't already shown or flagged
+        if(!inBounds(x, y)
+        || !board[x][y].shown
+        ||  board[x][y].flagged)  {
+=======
         // if it isn't already shown or flagged
         if(!inBounds(x, y) || board[x][y].shown)  {
+>>>>>>> added the evolution part
             return;
         }
 
@@ -218,6 +225,7 @@ public class MineSweeper  {
         game.printBoard(true);
         System.out.println("Fitness: " + game.fitnessCalc());
     }
+    /*
 
     public static void play2() {
         MineSweeper game = new MineSweeper(8, 10);
@@ -296,7 +304,12 @@ public class MineSweeper  {
                 }
             }
         }  
+<<<<<<< 47b825fa28627878b6ecdc8266777a500a36cf85
     }    
+=======
+    
+    */
+>>>>>>> added the evolution part
     public List<Square>getNeighBors(int x, int y)  {
         List<Square> neighbors = new LinkedList<Square>();
         for(int i = -1; i < 2; i++)  {
