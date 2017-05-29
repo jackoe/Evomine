@@ -191,12 +191,10 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
             for(int i = 0; i < BOARDSIZE; i++)  {
                 for(int j = 0; j < BOARDSIZE; j++)  {
                    
-                    if(game.get(i,j).flagged 
-                    || !game.get(i,j).shown)  {
-                        // System.out.println("skip?" + game.get(i,j));
+                    if(game.get(i,j).flagged
+                    || (FRONTIERNEIGHBORS != 1
+                    && game.get(i,j).shown))  {
                         continue;
-                    } else  {
-                        // System.out.println("noskip");
                     }
                    
                     double[] patternData = {-1, -1};
@@ -211,8 +209,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                     //System.out.println(patternData[1] + ", " + patternData[0]);    
                     //System.err.println("" + patternData[1]);
                     if(patternData[1] < minPatternScore)  {
-                    //System.out.println(patternData[1] + ", " + patternData[0]);    
-                        
+                        System.out.println("changeover");
                         minPatternScore = patternData[1];
                         minPattern = (int)patternData[0];
                         bestX = i;
@@ -220,8 +217,6 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                     }
                 }
             }
-            //game.printBoard(false);
-            
 
             if(FITNESSTYPE != 1 && chromoPattern[minPattern + 9] >= 5)  {
                 game.flag(bestX, bestY);
@@ -229,7 +224,6 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                 //System.out.println("x: " + bestX + "y: " + bestY);
                 hitBomb = game.peek(bestX, bestY) == -1;
             }
-            //game.printBoard(false);
         /*
         System.out.println("k: " + k);
         game.printBoard(false);
@@ -315,7 +309,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         while(showThreeGames)  {
             evalMaybePrint(result, 3, true);
             System.out.print("Show three more games?");
-            showThreeGames = in.nextBoolean();
+            showThreeGames = in.nextLine().toUpperCase().charAt(0) == 'T';
         }
         
     }
