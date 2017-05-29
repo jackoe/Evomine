@@ -22,11 +22,13 @@ import org.jenetics.stat.IntMomentStatistics;
 import java.util.Scanner;
 
 public class EvoMine {
-private static final int NUMGAMES = 100;
-private static final int BOARDSIZE = 15;
-private static final int NUMMINES = 35;
-private static final int NUMPATTERNS = 100;
+private static final int NUMGAMES = 10;
+private static final int BOARDSIZE = 8;
+private static final int NUMMINES = 10;
+private static final int NUMPATTERNS = 40;
 private static final int FITNESSTYPE = 1;
+private static final int NUMGENERATIONS = 1;
+private static final int POPSIZE = 1;
 
 
 
@@ -46,6 +48,7 @@ private static final int FITNESSTYPE = 1;
             return sq.value;
         }
     }
+
     /*
      * takes a game, takes coords, returns the index and match score of the best pattern.
      * match score is the edit distance of one integer string to another
@@ -96,6 +99,7 @@ private static final int FITNESSTYPE = 1;
      */
     private static MineSweeper playGame(int[] chromoPattern)  {
         MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
+        game.clickOnAZero();
         boolean hitBomb = false;
         for(int k = 0; k < 70 && !hitBomb; k++)  {
             int bestX = -1;
@@ -126,20 +130,26 @@ private static final int FITNESSTYPE = 1;
                     }
                 }
             }
+            //game.printBoard(false);
+            
+
             if(FITNESSTYPE != 1 && chromoPattern[minPattern + 8] >= 5)  {
                 game.flag(bestX, bestY);
             } else  {
                 //System.out.println("x: " + bestX + "y: " + bestY);
                 hitBomb = game.peek(bestX, bestY) == -1;
             }
-        }
+            //game.printBoard(false);
         /*
+        System.out.println("k: " + k);
         game.printBoard(false);
-        System.out.println(bestX);
-        System.out.println(bestY);
+        System.out.println(bestX + "");
+        System.out.println(bestY + "");
         System.out.println(minPattern + ", minPatternIndex");
         System.out.println(minPatternScore + ", minPatternScore");
         */
+        }
+        
             return game;
     }
 
@@ -188,6 +198,8 @@ private static final int FITNESSTYPE = 1;
         // 3.) Create the execution environment.
         Engine<IntegerGene, Integer> engine = Engine
             .builder(EvoMine::eval, gtf)
+            .maximizing()
+            .populationSize(POPSIZE)
             .build();
         
         final EvolutionStatistics<Integer, DoubleMomentStatistics> statistics = EvolutionStatistics.ofNumber();
@@ -195,19 +207,21 @@ private static final int FITNESSTYPE = 1;
         // 4.) Start the execution (evolution) and
         //     collect the result.
         Genotype<IntegerGene> result = engine.stream()
-            .limit(20)
+            .limit(NUMGENERATIONS)
             .peek(statistics)
             .collect(EvolutionResult.toBestGenotype());
-
+        
         System.out.println(statistics);
         System.out.println("top result: " + result);
 
         Scanner in = new Scanner(System.in);
+        
         boolean showThreeGames = true;
         while(showThreeGames)  {
             evalMaybePrint(result, 3, true);
             System.out.print("Show three more games?");
             showThreeGames = in.nextBoolean();
         }
+        
     }
 }

@@ -280,6 +280,18 @@ public class MineSweeper  {
         System.out.println("Fitness: " + game.fitnessCalc());
     }
 
+    public void clickOnAZero()  {
+        for(int i = 0; i < board.length; i++)  {
+            for(int j = 0; j < board.length; j++)  {
+                if(!board[i][j].shown
+                 && board[i][j].value == 0)  {
+                    peek(i, j);
+                    return;
+                 }
+            }
+        }
+    }
+
     public void check1(int d, int e) {
         int b = 0;
         for (Square sq : getNeighBors(d,e)) {
