@@ -10,6 +10,7 @@ public class MineSweeper  {
     // the board
     private Square[][] board;
     public int numMinesLeft;
+    public int numTurns;
 
     /*
      * Retuns the square object if it's accessible:
@@ -86,6 +87,7 @@ public class MineSweeper  {
             return -2;
         }
 
+        numTurns++;
         Square peekingAt = board[x][y];
         if(!peekingAt.shown)  {
             revealZeros(x, y);
@@ -106,6 +108,7 @@ public class MineSweeper  {
         if(board[x][y].shown)  {
             return;
         }
+        numTurns++;
         Square curr = board[x][y];
         //curr.flagged = !curr.flagged;
         curr.flagged = true;
@@ -118,6 +121,7 @@ public class MineSweeper  {
      * @param numMines The number of mines.
      */
     MineSweeper(int sideLen, int numMines)  {
+        numTurns = 0;
         board = new Square[sideLen][sideLen];
         Random mineLocGen = new Random();
         TreeSet<Pair> coords = new TreeSet<Pair>();
@@ -149,17 +153,29 @@ public class MineSweeper  {
         }
     }
 
+    private void printHyphenLine()  {
+        for(int i = 0; i < board.length; i++)  {
+            System.out.print("-");
+        }
+        System.out.println("");
+    }
+
     /* 
      * prints the board
      */
     public void printBoard(boolean show)  {
+        System.out.println("");
+        printHyphenLine();
         for(int i = 0; i < board.length; i++)  {
+            System.out.print("|");
             for(int j = 0; j < board.length; j++)  {
                 Square curr = board[i][j];
                 System.out.print(curr.toString(show));
             }
-            System.out.println("");
+            System.out.println("|");
         }
+        printHyphenLine();
+        System.out.println("number of turns = " + numTurns);
     }
     /*
      * Calculates fitness by #true flags - #false flags

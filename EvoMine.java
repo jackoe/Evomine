@@ -2,10 +2,10 @@
  * Jack Wines and Sam Orfield
  * Running this will start evolution
  * compile with:
- * javac MineSweeper.java -cp ../thisFolder
+ * javac MineSweeper.java -cp ../EvoMine
  * javac EvoMine
  * Run with:
- * java: Evomine
+ * java Evomine
  */
 import org.jenetics.BitChromosome;
 import org.jenetics.IntegerChromosome;
@@ -19,16 +19,17 @@ import org.jenetics.engine.EvolutionResult;
 import org.jenetics.util.Factory;
 import org.jenetics.stat.DoubleMomentStatistics;
 import org.jenetics.stat.IntMomentStatistics;
+import org.jenetics.TournamentSelector;
 import java.util.Scanner;
 import java.util.Arrays;
 
 public class EvoMine {
 private static final int NUMGAMES = 10;
-private static final int BOARDSIZE = 8;
-private static final int NUMMINES = 10;
-private static final int NUMPATTERNS = 4000;
-private static final int FITNESSTYPE = 0;
-private static final int NUMGENERATIONS = 20;
+private static final int BOARDSIZE = 10;
+private static final int NUMMINES = 20;
+private static final int NUMPATTERNS = 70;
+private static final int FITNESSTYPE = 1;
+private static final int NUMGENERATIONS = 200;
 private static final int POPSIZE = 1;
 private static final int FRONTIERNEIGHBORS = 1;
 
@@ -56,7 +57,7 @@ private static final int FRONTIERNEIGHBORS = 1;
      * match score is the edit distance of one integer string to another
      * where one edit is classiied as +- 1 to one index
      */
-    private static int getPatternMatchScore(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex)  {
+    private static int getPatternMatchScoreOffset(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex, int arrPatternIndexOffset)  {
         int deviationSoFar = 0;
         int arrPatternIndex = startingIndex;
 
@@ -65,14 +66,19 @@ private static final int FRONTIERNEIGHBORS = 1;
                 if(i == 0 && j == 0)  {
                     continue;
                 }
-                int actualSquareValue = squareToInt(game.get(x+ i, y+j));
-                int predictedSquareValue = arrPattern[arrPatternIndex];
+                int actualSquareValue = squareToInt(game.get(x + i, y + j));
+                int predictedSquareValue = arrPattern[arrPatternIndex + arrPatternIndex];
                 deviationSoFar += Math.abs(actualSquareValue - predictedSquareValue);
                 arrPatternIndex++;
             }
         }
         return deviationSoFar;
 
+    }
+    private static int getPatternMatchScore(MineSweeper game, int x, int y, int arrPattern, int startingIndex)  {
+        int bestDeviationSoFar = 10000;
+        for(int i = 0; i < 4; i++)  {
+        }
     }
 
     private static double getPatternMatchScore2(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex)  {
@@ -209,7 +215,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                     //System.out.println(patternData[1] + ", " + patternData[0]);    
                     //System.err.println("" + patternData[1]);
                     if(patternData[1] < minPatternScore)  {
-                        System.out.println("changeover");
+                        //System.out.println("changeover");
                         minPatternScore = patternData[1];
                         minPattern = (int)patternData[0];
                         bestX = i;
@@ -258,7 +264,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                     sumFitnesses += game.fitnessCalc();
                     break;
                 case 1:
-                    sumFitnesses += game.numRevealed();
+                    sumFitnesses += game.numTurns;
                     break;
             }
             if(printGames)  {
@@ -288,6 +294,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         Engine<IntegerGene, Integer> engine = Engine
             .builder(EvoMine::eval, gtf)
             .maximizing()
+            .selector(new TournamentSelector(4))
             .populationSize(POPSIZE)
             .build();
         
