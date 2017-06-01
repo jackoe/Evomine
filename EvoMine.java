@@ -29,9 +29,9 @@ private static final int BOARDSIZE = 10;
 private static final int NUMMINES = 20;
 private static final int NUMPATTERNS = 70;
 private static final int FITNESSTYPE = 1;
-private static final int NUMGENERATIONS = 200;
-private static final int POPSIZE = 1;
-private static final int FRONTIERNEIGHBORS = 1;
+private static final int NUMGENERATIONS = 100;
+private static final int POPSIZE = 50;
+private static final int FRONTIERNEIGHBORS = 0;
 
 
 
@@ -57,7 +57,7 @@ private static final int FRONTIERNEIGHBORS = 1;
      * match score is the edit distance of one integer string to another
      * where one edit is classiied as +- 1 to one index
      */
-    private static int getPatternMatchScoreOffset(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex, int arrPatternIndexOffset)  {
+    private static int getPatternMatchScore(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex)  {
         int deviationSoFar = 0;
         int arrPatternIndex = startingIndex;
 
@@ -67,7 +67,7 @@ private static final int FRONTIERNEIGHBORS = 1;
                     continue;
                 }
                 int actualSquareValue = squareToInt(game.get(x + i, y + j));
-                int predictedSquareValue = arrPattern[arrPatternIndex + arrPatternIndex];
+                int predictedSquareValue = arrPattern[arrPatternIndex];
                 deviationSoFar += Math.abs(actualSquareValue - predictedSquareValue);
                 arrPatternIndex++;
             }
@@ -75,11 +75,14 @@ private static final int FRONTIERNEIGHBORS = 1;
         return deviationSoFar;
 
     }
-    private static int getPatternMatchScore(MineSweeper game, int x, int y, int arrPattern, int startingIndex)  {
+    /*
+    private static int getPatternMatchScore(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex)  {
         int bestDeviationSoFar = 10000;
         for(int i = 0; i < 4; i++)  {
+
         }
     }
+    */
 
     private static double getPatternMatchScore2(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex)  {
         int arrPatternIndex = startingIndex;
@@ -92,58 +95,53 @@ private static final int FRONTIERNEIGHBORS = 1;
 
         for(int i = -1; i < 2; i++)  {
             for(int j = -1; j < 2; j++)  {
-            	int actualSquareValue = squareToInt(game.get(x + i, y + j));
+                int actualSquareValue = squareToInt(game.get(x + i, y + j));
                 int predictedSquareValue = arrPattern[arrPatternIndex];
                 if(i == 0 && j == 0)  {
-               	centervalue = actualSquareValue;
-                if (actualSquareValue != predictedSquareValue){
-                	return 1;
+                centervalue = actualSquareValue;
+                if (actualSquareValue != predictedSquareValue)  {
+                        return 1;
                 }    
                
-                if(actualSquareValue==9){
-                	numFlaggedGame++;
+                if(actualSquareValue==9)  {
+                    numFlaggedGame++;
                 }
-                if(actualSquareValue==-1){
-                	numSpacesGame++;
+                if(actualSquareValue==-1)  {
+                    numSpacesGame++;
                 }
-                if(predictedSquareValue==9){
-                	numFlaggedPattern++;
+                if(predictedSquareValue==9)  {
+                    numFlaggedPattern++;
                 }
-                if(predictedSquareValue==-1){
-                	numFlaggedPattern++;
+                if(predictedSquareValue==-1)  {
+                    numFlaggedPattern++;
                 }
                 arrPatternIndex++;
-            	}
-               }
-        }
-        if(numFlaggedPattern == numFlaggedGame && numSpacesGame == numSpacesPattern){
-        			//System.out.println("match " + Arrays.toString(arrPattern) + " " + arrPatternIndex);
-        			int correctedcentervalue = centervalue - numFlaggedGame;
-					if(correctedcentervalue == numSpacesGame){
-						patternFitness = 0;
-
-						return patternFitness;
-					}
-					else {
-						patternFitness = ((double)correctedcentervalue/numSpacesGame);
-						return patternFitness;
-					}
-                	
-
-
                 }
-                return 1;
-
+               }
+        }    
+        if(numFlaggedPattern == numFlaggedGame && numSpacesGame == numSpacesPattern)  {
+               //System.out.println("match " + Arrays.toString(arrPattern) + " " + arrPatternIndex);
+               int correctedcentervalue = centervalue - numFlaggedGame;
+               if(correctedcentervalue == numSpacesGame)  {
+                    patternFitness = 0;
+                    return patternFitness;
+                }
+                    else  {
+                    patternFitness = ((double)correctedcentervalue/numSpacesGame);
+                    return patternFitness;
+                }
+            }
+            return 1;
     }
 
     /*
      * Given a game, selects the best pattern to use for a given pair
      * returns both the best pattern index and its index.
      */
-    private static int[] selectPattern(MineSweeper game, int x, int y, int[] arrPattern )  {
+    private static double[] selectPattern(MineSweeper game, int x, int y, int[] arrPattern)  {
        
         int minPatternIndex = -1;
-        int minPatternScore = 900;
+        double minPatternScore = 900;
         for(int i = 0; i < NUMPATTERNS; i++)  {
             int patternIndex = i * 9;
             int patternScore = getPatternMatchScore(game, x, y, arrPattern, patternIndex);
@@ -152,7 +150,7 @@ private static final int FRONTIERNEIGHBORS = 1;
                 minPatternScore = patternScore;
             }
         }
-        int[] results = {minPatternIndex, minPatternScore};
+        double[] results = {minPatternIndex, minPatternScore};
         return results;
     }
 
@@ -166,7 +164,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         for(int i = 0; i < NUMPATTERNS; i++)  {
             int patternIndex = i * 9;
             double patternScore = getPatternMatchScore2(game, x, y, arrPattern, patternIndex);
-            if (patternScore < 1){
+            if (patternScore < 1)  {
             System.out.println("patternscore " + patternScore);
         }
 
@@ -196,7 +194,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
             double minPatternScore = 10000;
             for(int i = 0; i < BOARDSIZE; i++)  {
                 for(int j = 0; j < BOARDSIZE; j++)  {
-                   
+                    
                     if(game.get(i,j).flagged
                     || (FRONTIERNEIGHBORS != 1
                     && game.get(i,j).shown))  {
@@ -204,13 +202,11 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                     }
                    
                     double[] patternData = {-1, -1};
-                    if (FRONTIERNEIGHBORS==1){
-                   	
-                    patternData = selectPattern2(game, i, j, chromoPattern);
-                    
-
-                	//else
-                }
+                    if(FRONTIERNEIGHBORS == 1)  {
+                        patternData = selectPattern2(game, i, j, chromoPattern);
+                    } else if(FRONTIERNEIGHBORS == 0)  {
+                        patternData = selectPattern(game, i, j, chromoPattern);
+                    } 
 
                     //System.out.println(patternData[1] + ", " + patternData[0]);    
                     //System.err.println("" + patternData[1]);
@@ -224,7 +220,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                 }
             }
 
-            if(FITNESSTYPE != 1 && chromoPattern[minPattern + 9] >= 5)  {
+            if(FITNESSTYPE != 1 && chromoPattern[minPattern + 8] >= 5)  {
                 game.flag(bestX, bestY);
             } else  {
                 //System.out.println("x: " + bestX + "y: " + bestY);
@@ -247,8 +243,8 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
      * The eval function, takes a genetic thing,
      * outputs a fitness
      */
-    private static Integer evalMaybePrint(Genotype<IntegerGene> gt, int numEvalGames, boolean printGames) {
-        int[] chromoPattern = new int[10 * NUMPATTERNS];
+    private static Integer evalMaybePrint(Genotype<IntegerGene> gt, int numEvalGames, boolean printGames)  {
+        int[] chromoPattern = new int[9 * NUMPATTERNS];
         int i = 0;
         for(IntegerGene num : gt.getChromosome())  {
             chromoPattern[i] = num.intValue();
@@ -279,15 +275,15 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         return evalMaybePrint(gt, NUMGAMES, false);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         // 1.) Define the genotype (factory) suitable
         //     for the problem.
         Factory<Genotype<IntegerGene>> gtf = null;
-        	if (FRONTIERNEIGHBORS == 0){
+            if (FRONTIERNEIGHBORS == 0)  {
             gtf = Genotype.of(IntegerChromosome.of(-1,9, 9 * NUMPATTERNS));
         }
         else {
-        	gtf = Genotype.of(IntegerChromosome.of(-1,9, 10 * NUMPATTERNS));
+            gtf = Genotype.of(IntegerChromosome.of(-1,9, 10 * NUMPATTERNS));
         }
 
         // 3.) Create the execution environment.
