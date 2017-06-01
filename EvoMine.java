@@ -28,10 +28,10 @@ private static final int NUMGAMES = 10;
 private static final int BOARDSIZE = 10;
 private static final int NUMMINES = 20;
 private static final int NUMPATTERNS = 70;
-private static final int FITNESSTYPE = 1;
-private static final int NUMGENERATIONS = 100;
-private static final int POPSIZE = 50;
-private static final int FRONTIERNEIGHBORS = 0;
+private static final int FITNESSTYPE = 0;
+private static final int NUMGENERATIONS = 10;
+private static final int POPSIZE = 10;
+private static final int FRONTIERNEIGHBORS = 1;
 
 
 
@@ -244,7 +244,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
      * outputs a fitness
      */
     private static Integer evalMaybePrint(Genotype<IntegerGene> gt, int numEvalGames, boolean printGames)  {
-        int[] chromoPattern = new int[9 * NUMPATTERNS];
+        int[] chromoPattern = new int[(FRONTIERNEIGHBORS == 1? 10: 9) * NUMPATTERNS];
         int i = 0;
         for(IntegerGene num : gt.getChromosome())  {
             chromoPattern[i] = num.intValue();
@@ -279,10 +279,9 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         // 1.) Define the genotype (factory) suitable
         //     for the problem.
         Factory<Genotype<IntegerGene>> gtf = null;
-            if (FRONTIERNEIGHBORS == 0)  {
+        if (FRONTIERNEIGHBORS == 0)  {
             gtf = Genotype.of(IntegerChromosome.of(-1,9, 9 * NUMPATTERNS));
-        }
-        else {
+        }  else {
             gtf = Genotype.of(IntegerChromosome.of(-1,9, 10 * NUMPATTERNS));
         }
 
