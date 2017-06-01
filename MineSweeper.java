@@ -50,6 +50,8 @@ public class MineSweeper  {
             return;
         }
 
+        board[x][y].flagged = false;
+
         board[x][y].shown = true;
 
         // we reveal but don't recurse on nonzeros
@@ -82,16 +84,12 @@ public class MineSweeper  {
             System.err.println("x: " + x + ", y: " + y + " out of bounds");
             return 0;
         }
-        // We don't allow clicking on flagged squares
-        if(board[x][y].flagged)  {
-            return -2;
-        }
+        
 
         numTurns++;
         Square peekingAt = board[x][y];
-        if(!peekingAt.shown)  {
-            revealZeros(x, y);
-        }
+        revealZeros(x, y);
+        
         return peekingAt.value;
      }
     /*
@@ -164,7 +162,7 @@ public class MineSweeper  {
      * prints the board
      */
     public void printBoard(boolean show)  {
-        //System.out.println("");
+        System.out.println("");
         //printHyphenLine();
         for(int i = 0; i < board.length; i++)  {
             //System.out.print("|");
@@ -172,7 +170,7 @@ public class MineSweeper  {
                 Square curr = board[i][j];
                 System.out.print(curr.toString(show));
             }
-            //System.out.println("|");
+            System.out.println("");
         }
         //printHyphenLine();
         System.out.println("number of turns = " + numTurns);

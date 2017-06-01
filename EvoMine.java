@@ -25,12 +25,12 @@ import java.util.Arrays;
 
 public class EvoMine {
 private static final int NUMGAMES = 10;
-private static final int BOARDSIZE = 10;
+private static final int BOARDSIZE = 8;
 private static final int NUMMINES = 20;
 private static final int NUMPATTERNS = 70;
 private static final int FITNESSTYPE = 0;
 private static final int NUMGENERATIONS = 10;
-private static final int POPSIZE = 10;
+private static final int POPSIZE = 3;
 private static final int FRONTIERNEIGHBORS = 1;
 
 
@@ -180,6 +180,9 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
     private static boolean isFrontier(MineSweeper game, int x, int y){
     	for(int i = -1; i < 2; i++)  {
             for(int j = -1; j < 2; j++)  {
+            	if (!game.inBounds(x+i, y+j)){
+            		continue;
+            	}
             	if (squareToInt(game.get(x + i, y + j)) == -1){
             		return true;
             	}
@@ -207,18 +210,15 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
             for(int i = 0; i < BOARDSIZE; i++)  {
                 for(int j = 0; j < BOARDSIZE; j++)  {
                     
-                    if(game.get(i,j).flagged || !game.get(i,j).shown || !isFrontier(game,i,j)
-                    
-                   	|| ( (FRONTIERNEIGHBORS != 1
-                    && game.get(i,j).shown)))
+                    if(game.get(i,j).flagged || !game.get(i,j).shown || !isFrontier(game,i,j) || ( (FRONTIERNEIGHBORS != 1 && game.get(i,j).shown)))
                       {
                         continue;
                         
                     }
-                    else{
+                    
                     	System.out.println("N flagged, shown, frontier" + game.get(i,j)+ " coordinates " + i + " " + j);
                     	game.printBoard(false);
-                    }
+                    
                    
                     double[] patternData = {-1, -1};
                     if(FRONTIERNEIGHBORS == 1)  {
@@ -282,9 +282,9 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                     sumFitnesses += game.numTurns;
                     break;
             }
-            if(printGames)  {
-                game.printBoard(false);
-            }
+            //if(printGames)  {
+               // game.printBoard(false);
+           // }
         }
 
         return sumFitnesses;
