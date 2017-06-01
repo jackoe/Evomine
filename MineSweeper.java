@@ -164,17 +164,17 @@ public class MineSweeper  {
      * prints the board
      */
     public void printBoard(boolean show)  {
-        System.out.println("");
-        printHyphenLine();
+        //System.out.println("");
+        //printHyphenLine();
         for(int i = 0; i < board.length; i++)  {
-            System.out.print("|");
+            //System.out.print("|");
             for(int j = 0; j < board.length; j++)  {
                 Square curr = board[i][j];
                 System.out.print(curr.toString(show));
             }
-            System.out.println("|");
+            //System.out.println("|");
         }
-        printHyphenLine();
+        //printHyphenLine();
         System.out.println("number of turns = " + numTurns);
     }
     /*
