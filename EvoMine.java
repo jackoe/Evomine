@@ -165,7 +165,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
             int patternIndex = i * 9;
             double patternScore = getPatternMatchScore2(game, x, y, arrPattern, patternIndex);
             if (patternScore < 1)  {
-            System.out.println("patternscore " + patternScore);
+            //System.out.println("patternscore " + patternScore);
         }
 
             if(patternScore < minPatternScore)  {
@@ -175,6 +175,18 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         }
         double[] results = {minPatternIndex, minPatternScore};
         return results;
+    }
+
+    private static boolean isFrontier(MineSweeper game, int x, int y){
+    	for(int i = -1; i < 2; i++)  {
+            for(int j = -1; j < 2; j++)  {
+            	if (squareToInt(game.get(x + i, y + j)) == -1){
+            		return true;
+            	}
+            }
+        }
+        return false;       
+
     }
 
 
@@ -195,10 +207,17 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
             for(int i = 0; i < BOARDSIZE; i++)  {
                 for(int j = 0; j < BOARDSIZE; j++)  {
                     
-                    if(game.get(i,j).flagged
-                    || (FRONTIERNEIGHBORS != 1
-                    && game.get(i,j).shown))  {
+                    if(game.get(i,j).flagged || !game.get(i,j).shown || !isFrontier(game,i,j)
+                    
+                   	|| ( (FRONTIERNEIGHBORS != 1
+                    && game.get(i,j).shown)))
+                      {
                         continue;
+                        
+                    }
+                    else{
+                    	System.out.println("N flagged, shown, frontier" + game.get(i,j)+ " coordinates " + i + " " + j);
+                    	game.printBoard(false);
                     }
                    
                     double[] patternData = {-1, -1};
