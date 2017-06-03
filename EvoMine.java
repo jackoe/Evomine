@@ -22,6 +22,7 @@ import org.jenetics.stat.IntMomentStatistics;
 import org.jenetics.TournamentSelector;
 import java.util.Scanner;
 import java.util.Arrays;
+import org.jenetics.util.RandomRegistry;
 
 public class EvoMine {
 private static final int NUMGAMES = 10;
@@ -46,10 +47,23 @@ private static final int FRONTIERNEIGHBORS = 1;
         }  else if(sq.flagged)  {
             return 9;
         }  else if(!sq.shown)  {
-            return -1;
+            return -2;
         }  else  {
             return sq.value;
         }
+    }
+
+    private static void modArr(int index, int[] chromoPattern){    	
+    	if(index == 5){
+    		chromoPattern[index] = (chromoPattern[index]%8) + 1;
+    	}
+    	if (index == 10){
+    		chromoPattern[index] = chromoPattern[index]%2;
+    	} else  {
+    		chromoPattern[index] = chromoPattern[index]%3;
+    	}
+
+
     }
 
     /*
@@ -106,32 +120,32 @@ private static final int FRONTIERNEIGHBORS = 1;
                 if(actualSquareValue==9)  {
                     numFlaggedGame++;
                 }
-                if(actualSquareValue==-1)  {
+                if(actualSquareValue==-2)  {
                     numSpacesGame++;
                 }
-                if(predictedSquareValue==9)  {
+                if(predictedSquareValue==2)  {
                     numFlaggedPattern++;
                 }
-                if(predictedSquareValue==-1)  {
-                    numFlaggedPattern++;
+                if(predictedSquareValue==0)  {
+                    numSpacesPattern++;
                 }
                 arrPatternIndex++;
                 }
                }
         }    
         if(numFlaggedPattern == numFlaggedGame && numSpacesGame == numSpacesPattern)  {
-               //System.out.println("match " + Arrays.toString(arrPattern) + " " + arrPatternIndex);
-               int correctedcentervalue = centervalue - numFlaggedGame;
-               if(correctedcentervalue == numSpacesGame)  {
-                    patternFitness = 0;
-                    return patternFitness;
-                }
-                    else  {
-                    patternFitness = ((double)correctedcentervalue/numSpacesGame);
-                    return patternFitness;
-                }
+           //System.out.println("match " + Arrays.toString(arrPattern) + " " + arrPatternIndex);
+           int correctedcentervalue = centervalue - numFlaggedGame;
+           if(correctedcentervalue == numSpacesGame)  {
+                patternFitness = 0;
+                return patternFitness;
             }
-            return 1;
+                else  {
+                patternFitness = ((double)correctedcentervalue/numSpacesGame);
+                return patternFitness;
+            }
+        }
+        return 1;
     }
 
     /*
@@ -162,7 +176,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         double minPatternIndex = -1;
         
         for(int i = 0; i < NUMPATTERNS; i++)  {
-            int patternIndex = i * 9;
+            int patternIndex = i * (10);
             double patternScore = getPatternMatchScore2(game, x, y, arrPattern, patternIndex);
             if (patternScore < 1)  {
             //System.out.println("patternscore " + patternScore);
@@ -174,6 +188,10 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
             }
         }
         double[] results = {minPatternIndex, minPatternScore};
+        for(int i = 0; i <10; i++){
+        	System.out.println("Best Pattern at" + i + " " + arrPattern[(int)minPatternIndex+i]);
+        }
+        System.out.println("minpatternscore" + minPatternScore);
         return results;
     }
 
@@ -183,7 +201,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
             	if (!game.inBounds(x+i, y+j)){
             		continue;
             	}
-            	if (squareToInt(game.get(x + i, y + j)) == -1){
+            	if (squareToInt(game.get(x + i, y + j)) == -2){
             		return true;
             	}
             }
@@ -199,33 +217,38 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
      * @return the fitness
      */
     private static MineSweeper playGame(int[] chromoPattern)  {
+    	if(FRONTIERNEIGHBORS == 1)  {
+    		for(int i= 0; i<10*NUMPATTERNS; i++)  {
+    			modArr(i, chromoPattern);
+    		}
+    	}
         MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
         game.clickOnAZero();
         boolean hitBomb = false;
-        for(int k = 0; k < 70 && !hitBomb; k++)  {
+        for(int k = 0; k < NUMMINES && !hitBomb; k++)  {
             int bestX = -1;
             int bestY = -1;
+            int evalX = -1;
+            int evalY = -1;
+            int [] spacesX = new int [7];
+            int [] spacesY = new int [7];
+            for(int i=0; i<7; i++)  {
+            	spacesX[i] = -1;
+            	spacesY[i] = -1;
+            }  
             int minPattern = -1;
             double minPatternScore = 10000;
             for(int i = 0; i < BOARDSIZE; i++)  {
                 for(int j = 0; j < BOARDSIZE; j++)  {
-                    
-                    if(game.get(i,j).flagged || !game.get(i,j).shown || !isFrontier(game,i,j) || ( (FRONTIERNEIGHBORS != 1 && game.get(i,j).shown)))
-                      {
+                    if(game.get(i,j).flagged || !game.get(i,j).shown || !isFrontier(game,i,j))  {
                         continue;
-                        
                     }
                     
-                    	System.out.println("N flagged, shown, frontier" + game.get(i,j)+ " coordinates " + i + " " + j);
-                    	game.printBoard(false);
-                    
-                   
-                    double[] patternData = {-1, -1};
-                    if(FRONTIERNEIGHBORS == 1)  {
-                        patternData = selectPattern2(game, i, j, chromoPattern);
-                    } else if(FRONTIERNEIGHBORS == 0)  {
-                        patternData = selectPattern(game, i, j, chromoPattern);
-                    } 
+                	System.out.println("N flagged, shown, frontier" + game.get(i,j)+ " coordinates " + i + " " + j);
+                	game.printBoard(false);
+
+                    double[] patternData = selectPattern2(game, i, j, chromoPattern);
+                    System.out.println("Pattern Data" + patternData[0] + patternData[1]);
 
                     //System.out.println(patternData[1] + ", " + patternData[0]);    
                     //System.err.println("" + patternData[1]);
@@ -235,28 +258,72 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
                         minPattern = (int)patternData[0];
                         bestX = i;
                         bestY = j;
-                    }
-                }
-            }
+                        int spaceIndex = 0;
+                        //for(int e=0; e<7; e++){
+            			//		spacesX[e] = -1;
+            			//		spacesY[e] = -1;
+            			//	}  
+                        for(int a = -1; a < 2; a++)  {
+            				for(int b = -1; b < 2; b++)  {
+               					if (!game.inBounds(i+a, b+j)||(i == 0 && j == 0) )  {
+            						continue;
+                    				}
+                    			Square sq = game.get(i + a, j + b);
+                				int actualSquareValue = squareToInt(game.get(i + a, j + b));
+            					if (!sq.flagged && !sq.shown && actualSquareValue == -2)  {
+            						spacesX[spaceIndex] = i+a;
+            						spacesY[spaceIndex] = b+j;
+            						spaceIndex++;                    					
+           						}
+                    		}
+	                	}
+		                int spaceSelector = RandomRegistry.getRandom().nextInt(spaceIndex+1);
+		                evalX = spacesX[spaceSelector];
+		                evalY = spacesY[spaceSelector];
+		            }
 
-            if(FITNESSTYPE != 1 && chromoPattern[minPattern + 8] >= 5)  {
-                game.flag(bestX, bestY);
-            } else  {
-                //System.out.println("x: " + bestX + "y: " + bestY);
-                hitBomb = game.peek(bestX, bestY) == -1;
-            }
-        /*
-        System.out.println("k: " + k);
-        game.printBoard(false);
-        System.out.println(bestX + "");
-        System.out.println(bestY + "");
-        System.out.println(minPattern + ", minPatternIndex");
-        System.out.println(minPatternScore + ", minPatternScore");
-        */
+		            int randTest = RandomRegistry.getRandom().nextInt(2);
+		            //System.out.println("randTest" + randTest);
+
+		            if(FITNESSTYPE != 1 && randTest == 1) // && chromoPattern[minPattern + 9] == 1)  
+		            {
+		                game.flag(evalX, evalY);
+		                System.out.println("flagged bestX" + bestX + "bestY" + bestY + "evalX" + evalX + "evalY " + evalY);
+		                System.out.println("randTest" + randTest);
+		                for(int t= 0; t< 7; t++)  {
+		                	System.out.println("Spaces" + spacesX[t] + " " + spacesY[t]);
+
+		                }
+		                int test40 = squareToInt(game.get(evalX,evalY));
+		                System.out.println("SpaceValueFLAG" + test40);
+
+		                
+		            } else  {
+		                //System.out.println("x: " + bestX + "y: " + bestY);
+		                hitBomb = game.peek(evalX, evalY) == -1;
+		                System.out.println("Clicked bestX" + bestX + "bestY" + bestY + "evalX" + evalX + "evalY" + evalY);
+		                System.out.println("randTest" + randTest);
+		                System.out.println("randTest" + randTest);
+		                for(int t= 0; t< 7; t++)  {
+		                	System.out.println("Spaces" + spacesX[t] + " " + spacesY[t]);
+			            }
+			            int test41 = squareToInt(game.get(evalX,evalY));
+			            System.out.println("SpaceValueCLICK" + test41);
+				        /*
+				        System.out.println("k: " + k);
+				        game.printBoard(false);
+				        System.out.println(bestX + "");
+				        System.out.println(bestY + "");
+				        System.out.println(minPattern + ", minPatternIndex");
+				        System.out.println(minPatternScore + ", minPatternScore");
+				        */
+			        }
+		        }
+        	}
         }
-        
-            return game;
-    }
+		return game;
+	}
+
 
     /*
      * The eval function, takes a genetic thing,
@@ -301,7 +368,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         if (FRONTIERNEIGHBORS == 0)  {
             gtf = Genotype.of(IntegerChromosome.of(-1,9, 9 * NUMPATTERNS));
         }  else {
-            gtf = Genotype.of(IntegerChromosome.of(-1,9, 10 * NUMPATTERNS));
+            gtf = Genotype.of(IntegerChromosome.of(0,24, 10 * NUMPATTERNS));
         }
 
         // 3.) Create the execution environment.
