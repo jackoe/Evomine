@@ -105,6 +105,9 @@ public class MineSweeper  {
 
         numTurns++;
         Square peekingAt = board[x][y];
+        if(peekingAt.flagged)  {
+            return 0;
+        }
         revealZeros(x, y);
         
         return peekingAt.value;
