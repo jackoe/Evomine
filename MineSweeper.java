@@ -98,7 +98,7 @@ public class MineSweeper  {
      */
     public int peek(int x, int y)  {
         if(!inBounds(x, y))  {
-            System.err.println("x: " + x + ", y: " + y + " out of bounds");
+            System.out.println("x: " + x + ", y: " + y + " out of bounds");
             return 0;
         }
         
@@ -120,7 +120,7 @@ public class MineSweeper  {
      */
     public void flag(int x, int y)  {
         if(!inBounds(x, y))  {
-            System.err.println("x: " + x + ", y: " + y + " out of bounds");
+            System.out.println("x: " + x + ", y: " + y + " out of bounds");
             return;
         }
         // We don't allow flagging revealed squares
