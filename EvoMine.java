@@ -216,7 +216,7 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
      * Given a chromosome pattern, plays the game.
      * @return the fitness
      */
-    private static MineSweeper playGame(int[] chromoPattern)  {
+    private static MineSweeper playGame2(int[] chromoPattern)  {
     	if(FRONTIERNEIGHBORS == 1)  {
     		for(int i= 0; i<10*NUMPATTERNS; i++)  {
     			modArr(i, chromoPattern);
@@ -323,6 +323,13 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
         }
 		return game;
 	}
+	private static MineSweeper playGame(int[] chromoPattern)  {
+		MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
+		boolean hitBomb = false;
+        game.clickOnAZero();
+        return game;
+
+    	}
 
 
     /*
