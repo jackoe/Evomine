@@ -71,82 +71,7 @@ private static final int FRONTIERNEIGHBORS = 1;
      * match score is the edit distance of one integer string to another
      * where one edit is classiied as +- 1 to one index
      */
-    private static int getPatternMatchScore3(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex)  {
-        int deviationSoFar = 0;
-        int arrPatternIndex = startingIndex;
 
-        for(int i = -1; i < 2; i++)  {
-            for(int j = -1; j < 2; j++)  {
-                if(i == 0 && j == 0)  {
-                    continue;
-                }
-                int actualSquareValue = squareToInt(game.get(x + i, y + j));
-                int predictedSquareValue = arrPattern[arrPatternIndex];
-                deviationSoFar += Math.abs(actualSquareValue - predictedSquareValue);
-                arrPatternIndex++;
-            }
-        }
-        return deviationSoFar;
-
-    }
-    /*
-    private static int getPatternMatchScore(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex)  {
-        int bestDeviationSoFar = 10000;
-        for(int i = 0; i < 4; i++)  {
-
-        }
-    }
-    */
-
-    private static double getPatternMatchScore2(MineSweeper game, int x, int y, int[] arrPattern, int startingIndex)  {
-        int arrPatternIndex = startingIndex;
-        int numSpacesGame=0;
-        int numFlaggedGame=0;
-        int numSpacesPattern=0;
-        int numFlaggedPattern=0;
-        double patternFitness=10;
-        int centervalue = -2;
-
-        for(int i = -1; i < 2; i++)  {
-            for(int j = -1; j < 2; j++)  {
-                int actualSquareValue = squareToInt(game.get(x + i, y + j));
-                int predictedSquareValue = arrPattern[arrPatternIndex];
-                if(i == 0 && j == 0)  {
-                centervalue = actualSquareValue;
-                if (actualSquareValue != predictedSquareValue)  {
-                        return 1;
-                }    
-               
-                if(actualSquareValue==9)  {
-                    numFlaggedGame++;
-                }
-                if(actualSquareValue==-2)  {
-                    numSpacesGame++;
-                }
-                if(predictedSquareValue==2)  {
-                    numFlaggedPattern++;
-                }
-                if(predictedSquareValue==0)  {
-                    numSpacesPattern++;
-                }
-                arrPatternIndex++;
-                }
-               }
-        }    
-        if(numFlaggedPattern == numFlaggedGame && numSpacesGame == numSpacesPattern)  {
-           // System.out.println("match " + Arrays.toString(arrPattern) + " " + arrPatternIndex);
-           int correctedcentervalue = centervalue - numFlaggedGame;
-           if(correctedcentervalue == numSpacesGame)  {
-                patternFitness = 0;
-                return patternFitness;
-            }
-                else  {
-                patternFitness = ((double)correctedcentervalue/numSpacesGame);
-                return patternFitness;
-            }
-        }
-        return 1;
-    }
 
     /*
      * Given a game, selects the best pattern to use for a given pair
@@ -170,31 +95,6 @@ private static final int FRONTIERNEIGHBORS = 1;
     */
 
 
-private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arrPattern )  {
-       
-        int zero = 0;
-        double minPatternScore = 900;
-        double minPatternIndex = -1;
-        
-        for(int i = 0; i < NUMPATTERNS; i++)  {
-            int patternIndex = i * (10);
-            double patternScore = getPatternMatchScore2(game, x, y, arrPattern, patternIndex);
-            if (patternScore < 1)  {
-            // System.out.println("patternscore " + patternScore);
-        }
-
-            if(patternScore < minPatternScore)  {
-                minPatternIndex = patternIndex;
-                minPatternScore = patternScore;
-            }
-        }
-        double[] results = {minPatternIndex, minPatternScore};
-        for(int i = 0; i <10; i++){
-        	System.out.println("Best Pattern at" + i + " " + arrPattern[(int)minPatternIndex+i]);
-        }
-        System.out.println("minpatternscore" + minPatternScore);
-        return results;
-    }
 
     private static boolean isFrontier(MineSweeper game, int x, int y){
     	for(int i = -1; i < 2; i++)  {
