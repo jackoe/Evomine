@@ -53,15 +53,15 @@ private static final int FRONTIERNEIGHBORS = 1;
         }
     }
 
-    private static void modArr(int index, int[] chromoPattern){    	
-    	if(index%10 == 4){
-    		chromoPattern[index] = (chromoPattern[index]%8) + 1;
-    	}
-    	if (index%10 == 9){
-    		chromoPattern[index] = chromoPattern[index]%2;
-    	} else  {
-    		chromoPattern[index] = chromoPattern[index]%3;
-    	}
+    private static void modArr(int index, int[] chromoPattern)  {       
+       if(index%10 == 4)  {
+          chromoPattern[index] = (chromoPattern[index]%8) + 1;
+       }
+       if (index%10 == 9)  {
+          chromoPattern[index] = chromoPattern[index]%2;
+       } else  {
+          chromoPattern[index] = chromoPattern[index]%3;
+       }
 
 
     }
@@ -96,15 +96,15 @@ private static final int FRONTIERNEIGHBORS = 1;
 
 
 
-    private static boolean isFrontier(MineSweeper game, int x, int y){
-    	for(int i = -1; i < 2; i++)  {
+    private static boolean isFrontier(MineSweeper game, int x, int y)  {
+       for(int i = -1; i < 2; i++)  {
             for(int j = -1; j < 2; j++)  {
-            	if (!game.inBounds(x+i, y+j)){
-            		continue;
-            	}
-            	if (squareToInt(game.get(x + i, y + j)) == -2){
-            		return true;
-            	}
+               if (!game.inBounds(x+i, y+j))  {
+                  continue;
+               }
+               if (squareToInt(game.get(x + i, y + j)) == -2)  {
+                  return true;
+               }
             }
         }
         return false;       
@@ -112,70 +112,70 @@ private static final int FRONTIERNEIGHBORS = 1;
     }
 
     private static Pattern organizePattern(int[] arrPattern)  {
-    	int patternIndex = 0;
+       int patternIndex = 0;
 
-    	Pattern pattern = new Pattern();
-    	pattern.centers = new int [NUMPATTERNS];
-    	pattern.numSpacesPattern = new int [NUMPATTERNS];
-    	pattern.numFlaggedPattern = new int [NUMPATTERNS];
+       Pattern pattern = new Pattern();
+       pattern.centers = new int [NUMPATTERNS];
+       pattern.numSpacesPattern = new int [NUMPATTERNS];
+       pattern.numFlaggedPattern = new int [NUMPATTERNS];
 
-    	int [] centerIndicies = new int [NUMPATTERNS];
-    	int [] actions = new int [NUMPATTERNS];
-    	int [] actionIndicies = new int [NUMPATTERNS];
-
-
-    	
-    	int tempSpaces;
-		int tempFlagged;
-		
-    	for(int i=0; i<NUMPATTERNS; i++){
-    		patternIndex = 10*i;
-			pattern.centers[i] = arrPattern[patternIndex+4];
-			centerIndicies[i] = patternIndex +4;
-			actions[i] = arrPattern[patternIndex+9];
-			actionIndicies[i] = patternIndex +9;
-			tempSpaces =0;
-			tempFlagged =0;
-			
-			for(int j=0; j<10; j++){
-				if (j==4 || j==9){
-					continue;
-				}
-				else if(arrPattern[i+j]==0){
-					tempSpaces++;
-				}
-				else if(arrPattern[i+j]==2){
-					tempFlagged++;
-				}
-				
-			pattern.numSpacesPattern[i]=tempSpaces;
-			pattern.numFlaggedPattern[i]=tempFlagged;
-			
+       int [] centerIndicies = new int [NUMPATTERNS];
+       int [] actions = new int [NUMPATTERNS];
+       int [] actionIndicies = new int [NUMPATTERNS];
 
 
-			}
+       
+       int tempSpaces;
+      int tempFlagged;
+      
+       for(int i=0; i<NUMPATTERNS; i++)  {
+          patternIndex = 10*i;
+         pattern.centers[i] = arrPattern[patternIndex+4];
+         centerIndicies[i] = patternIndex +4;
+         actions[i] = arrPattern[patternIndex+9];
+         actionIndicies[i] = patternIndex +9;
+         tempSpaces =0;
+         tempFlagged =0;
+         
+         for(int j=0; j<10; j++)  {
+            if (j==4 || j==9)  {
+               continue;
+            }
+            else if(arrPattern[i+j]==0)  {
+               tempSpaces++;
+            }
+            else if(arrPattern[i+j]==2)  {
+               tempFlagged++;
+            }
+            
+         pattern.numSpacesPattern[i]=tempSpaces;
+         pattern.numFlaggedPattern[i]=tempFlagged;
+         
 
-    	}
-    	return pattern;
+
+         }
+
+       }
+       return pattern;
     }
 
-    private static int[] getNeighborsInfo(MineSweeper game, int i, int j){
-    	int tempBoardSpaces =0;
-    	int tempBoardFlagged =0;
-    	int tempBoardShown =0;
-    	for(int a = -1; a < 2; a++)  {
+    private static int[] getNeighborsInfo(MineSweeper game, int i, int j)  {
+       int tempBoardSpaces =0;
+       int tempBoardFlagged =0;
+       int tempBoardShown =0;
+       for(int a = -1; a < 2; a++)  {
             for(int b = -1; b < 2; b++)  {
-               	if (!game.inBounds(i+a, b+j)||(i == 0 && j == 0) )  {
-            		continue;
+                  if (!game.inBounds(i+a, b+j)||(i == 0 && j == 0) )  {
+                  continue;
                 }
                 if (squareToInt(game.get(i+a,b+j)) == -2)  {
-                	tempBoardSpaces++;
+                   tempBoardSpaces++;
                 }
                 if (squareToInt(game.get(i+a,b+j)) == 9)  {
-                	tempBoardFlagged++;
+                   tempBoardFlagged++;
                 }
                 else{
-                	tempBoardShown++;
+                   tempBoardShown++;
                 }
             } 
         }
@@ -187,98 +187,97 @@ private static final int FRONTIERNEIGHBORS = 1;
     }
 
     
-    private static double[] comparePattern(Pattern pattern, int boardCenter, int boardSpaces, int boardFlags){
-    	double patternFitness = 1;
-    	double[] patternFitnesses = new double[NUMPATTERNS];
-    	for(int i=0; i<NUMPATTERNS; i++){
-    		if(pattern.centers[i] 		    == boardCenter 
-    		&& pattern.numSpacesPattern[i]  == boardSpaces 
-    		&& pattern.numFlaggedPattern[i] == boardFlags) {
-    			patternFitness = (pattern.centers[i] - pattern.numFlaggedPattern[i]) / pattern.numSpacesPattern[i];
-    			System.out.println("B " + boardCenter + " " + boardSpaces + " " + boardFlags + " " + i + " " + patternFitness);
-    			System.out.println("P " + pattern.centers[i] + " " + pattern.numSpacesPattern[i] + " " + pattern.numFlaggedPattern[i] + " " + i + " " + patternFitness);
-    		}
-    		
-    		if(patternFitness < 0){
-    			patternFitness = 2;
-    		}
-    		patternFitnesses[i] = patternFitness;
-    		
-    	}
-    	return patternFitnesses;
+    private static double[] comparePattern(Pattern pattern, int boardCenter, int boardSpaces, int boardFlags)  {
+       double patternFitness = 1;
+       double[] patternFitnesses = new double[NUMPATTERNS];
+       for(int i=0; i<NUMPATTERNS; i++)  {
+          if(pattern.centers[i]           == boardCenter 
+          && pattern.numSpacesPattern[i]  == boardSpaces 
+          && pattern.numFlaggedPattern[i] == boardFlags) {
+             patternFitness = (pattern.centers[i] - pattern.numFlaggedPattern[i]) / pattern.numSpacesPattern[i];
+             System.out.println("B " + boardCenter + " " + boardSpaces + " " + boardFlags + " " + i + " " + patternFitness);
+             System.out.println("P " + pattern.centers[i] + " " + pattern.numSpacesPattern[i] + " " + pattern.numFlaggedPattern[i] + " " + i + " " + patternFitness);
+          }
+          
+          if(patternFitness < 0)  {
+             patternFitness = 2;
+          }
+          patternFitnesses[i] = patternFitness;
+          
+       }
+       return patternFitnesses;
 
     }
 
-    private static double[] minPatternFitness(Pattern pattern, int boardCenter, int boardSpaces, int boardFlags){
-    	double minPF = 3;
-    	double currPF = 0;
-    	double currIndex = 0;
-    	double minIndex = 0;
-    	double [] compared = comparePattern(pattern, boardCenter,boardSpaces,boardFlags);
-    	for(int i = 0; i < NUMPATTERNS; i++){
-    		currPF = compared[i];
-    		if(currPF<minPF){
-    			minPF = currPF;
-    			minIndex = currIndex;
-    			currIndex++;
-    		}
+    private static double[] minPatternFitness(Pattern pattern, int boardCenter, int boardSpaces, int boardFlags)  {
+       double minPF = 3;
+       double currPF = 0;
+       double currIndex = 0;
+       double minIndex = 0;
+       double [] compared = comparePattern(pattern, boardCenter,boardSpaces,boardFlags);
+       for(int i = 0; i < NUMPATTERNS; i++)  {
+          currPF = compared[i];
+          if(currPF<minPF)  {
+             minPF = currPF;
+             minIndex = currIndex;
+             currIndex++;
+          }
 
-    	}
-    	
-    	
-    	compared[0] = minPF;
-    	compared[1] = minIndex*10;
-    	return compared;
-    }	
+       }
+       
+       
+       compared[0] = minPF;
+       compared[1] = minIndex*10;
+       return compared;
+    }   
 
 
 
     private static boolean actOnBestSquare(MineSweeper game, int[] chromoPatterns, int x, int y, int bestPatternIndex, int evalX, int evalY)  {
-    	boolean hitBomb = false;
-		int[] spacesX = new int [8];
-		int[] spacesY = new int [8];
-		for(int i=0; i<8; i++)  {
-			spacesX[i] = -1;
-			spacesY[i] = -1;
-		}
+       boolean hitBomb = false;
+      int[] spacesX = new int [8];
+      int[] spacesY = new int [8];
+      for(int i=0; i<8; i++)  {
+         spacesX[i] = -1;
+         spacesY[i] = -1;
+      }
 
-		int action = chromoPatterns[bestPatternIndex + 9];
-	    if(action == 1)  {
-			game.flag(evalX, evalY);
-		} else  {
-			hitBomb = game.peek(evalX, evalY) == -1;
-		}
-		return hitBomb;
+      int action = chromoPatterns[bestPatternIndex + 9];
+       if(action == 1)  {
+         game.flag(evalX, evalY);
+      } else  {
+         hitBomb = game.peek(evalX, evalY) == -1;
+      }
+      return hitBomb;
     }
 
 
     private static int getAdjacentSquareData(MineSweeper game, int x, int y, int[] spacesX, int[] spacesY)  {
-    	int spaceIndex = 0;
-    	for(int a = -1; a < 2; a++)  {
-			for(int b = -1; b < 2; b++)  {
-				int currX = x + a;
-				int currY = y + b;
+         int spaceIndex = 0;
+         for(int a = -1; a < 2; a++)  {
+         for(int b = -1; b < 2; b++)  {
+            int currX = x + a;
+            int currY = y + b;
 
-				if (!game.inBounds(currX, currY) || (x == 0 && y == 0))
-					continue;
+            if (!game.inBounds(currX, currY) || (a == 0 && b == 0))
+               continue;
 
-				//Square sq = game.get(currX, currY);
-				int actualSquareValue = squareToInt(game.get(currX, currY));
-				if(actualSquareValue == -2){
-					spacesX[spaceIndex] = currX;
-					spacesY[spaceIndex] = currY;
-					spaceIndex++;  
+            int actualSquareValue = squareToInt(game.get(currX, currY));
+            if(actualSquareValue == -2)  {
+               spacesX[spaceIndex] = currX;
+               spacesY[spaceIndex] = currY;
+               spaceIndex++;
 
-					/*
-					System.out.println("squareInfo value " + actualSquareValue + " xCoord " + (currX) + " yCoord " + (currY));
-					for(int t= 0; t< 8; t++)  {
-	    				System.out.println("Spaces" + spacesX[t] + " " + spacesY[t]);
-	    			}
-	    			*/
-				}
-			}
-		}
-		return spaceIndex;
+               /*
+               System.out.println("squareInfo value " + actualSquareValue + " xCoord " + (currX) + " yCoord " + (currY));
+               for(int t= 0; t< 8; t++)  {
+                   System.out.println("Spaces" + spacesX[t] + " " + spacesY[t]);
+                }
+                */
+            }
+         }
+      }
+      return spaceIndex;
     }
 
     private static boolean makeMove(MineSweeper game, int[] chromoPatterns, Pattern pattern)  {
@@ -292,7 +291,7 @@ private static final int FRONTIERNEIGHBORS = 1;
         // loop thorugh all of the spaces
         for(int i = 0; i < BOARDSIZE; i++)  {
             for(int j = 0; j < BOARDSIZE; j++)  {
-            	// skip if it's not a frontier
+                // skip if it's not a frontier
                 if(game.get(i,j).flagged || !game.get(i,j).shown || !isFrontier(game,i,j))  {
                     continue;
                 }
@@ -306,51 +305,51 @@ private static final int FRONTIERNEIGHBORS = 1;
                 // System.out.println("minPatFitnessIndex " + minPatFitnessIndex);
 
                 int[] spacesX = new int [8];
-				int[] spacesY = new int [8];
-				int spaceIndex = getAdjacentSquareData(game, i, j, spacesX, spacesY);
+                int[] spacesY = new int [8];
+                int spaceIndex = getAdjacentSquareData(game, i, j, spacesX, spacesY);
 
-        		// if the pattern is above our running best, 
-        		// then we change our running best
-				if(minPatFitness < bestPatFitness)  {
-					bestPatternIndex = minPatFitnessIndex;
-					bestPatFitness = minPatFitness;
-					bestX = i;
-					bestY = j;
-					int spaceSelector = RandomRegistry.getRandom().nextInt(spaceIndex+1);
-					evalX = spacesX[spaceSelector];
-					evalY = spacesY[spaceSelector];
-				}
+                // if the pattern is above our running best, 
+                // then we change our running best
+                if(minPatFitness < bestPatFitness)  {
+                    bestPatternIndex = minPatFitnessIndex;
+                    bestPatFitness = minPatFitness;
+                    bestX = i;
+                    bestY = j;
+                    int spaceSelector = RandomRegistry.getRandom().nextInt(spaceIndex+1);
+                    evalX = spacesX[spaceSelector];
+                    evalY = spacesY[spaceSelector];
+                }
             // System.out.println("Frontier Coords " + i + " , " + j);
             }
         }
-	    boolean hitBomb = actOnBestSquare(game, chromoPatterns, bestX, bestY, bestPatternIndex, evalX, evalY);
-		//game.printBoard(false);
-		return hitBomb;
+        boolean hitBomb = actOnBestSquare(game, chromoPatterns, bestX, bestY, bestPatternIndex, evalX, evalY);
+        //game.printBoard(false);
+        return hitBomb;
     }
 
     /*
      * Given a chromosome pattern, plays the game.
      * @return the fitness
      */
-	private static MineSweeper playGame(int[] chromoPatterns)  {
-		// modulate the patterns to be <8, <2 .etc
-		for (int i = 0; i < chromoPatterns.length; i++) {
-			modArr(i, chromoPatterns);
-		}
+    private static MineSweeper playGame(int[] chromoPatterns)  {
+        // modulate the patterns to be <8, <2 .etc
+        for (int i = 0; i < chromoPatterns.length; i++) {
+                modArr(i, chromoPatterns);
+        }
 
-		Pattern pattern = organizePattern(chromoPatterns);
-		MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
-		boolean hitBomb = false;
+        Pattern pattern = organizePattern(chromoPatterns);
+        MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
+        boolean hitBomb = false;
 
-		for (int i = 0; i < 90 && !hitBomb; i++) {
-			hitBomb = makeMove(game, chromoPatterns, pattern);
-		}
+        for (int i = 0; i < 90 && !hitBomb; i++) {
+                hitBomb = makeMove(game, chromoPatterns, pattern);
+        }
 
         game.clickOnAZero();
         game.printBoard(false);
 
-		return game;
-	}
+        return game;
+    }
 
 
     /*
