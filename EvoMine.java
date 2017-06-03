@@ -297,10 +297,7 @@ private static final int FRONTIERNEIGHBORS = 1;
                     continue;
                 }
 
-            	int minPatternFitnessIndex = 0;
-
                 int[] nInfo = getNeighborsInfo(game, i,j);
-
                 double[] fitnessInfo = minPatternFitness(pattern, nInfo[0],nInfo[1],nInfo[2]);
                 double minPatFitness = fitnessInfo[0];
                 int minPatFitnessIndex = (int)fitnessInfo[1];
