@@ -235,11 +235,12 @@ public class MineSweeper  {
                         fitness++;
                     }
                     else {
-                        fitness--;
+                        fitness-=1.5;
                     }    
                 }
             }
         }
+        System.out.println("game fitness " + fitness);
         return fitness;
     }
    

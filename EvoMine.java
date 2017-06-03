@@ -30,7 +30,7 @@ private static final int BOARDSIZE = 8;
 private static final int NUMMINES = 20;
 private static final int NUMPATTERNS = 700;
 private static final int FITNESSTYPE = 0;
-private static final int NUMGENERATIONS = 30;
+private static final int NUMGENERATIONS = 300;
 private static final int POPSIZE = 10;
 private static final int FRONTIERNEIGHBORS = 1;
 
@@ -195,8 +195,8 @@ private static final int FRONTIERNEIGHBORS = 1;
           && pattern.numSpacesPattern[i]  == boardSpaces 
           && pattern.numFlaggedPattern[i] == boardFlags) {
              patternFitness = (pattern.centers[i] - pattern.numFlaggedPattern[i]) / pattern.numSpacesPattern[i];
-            // System.out.println("B " + boardCenter + " " + boardSpaces + " " + boardFlags + " " + i + " " + patternFitness);
-            // System.out.println("P " + pattern.centers[i] + " " + pattern.numSpacesPattern[i] + " " + pattern.numFlaggedPattern[i] + " " + i + " " + patternFitness);
+            System.out.println("B " + boardCenter + " " + boardSpaces + " " + boardFlags + " " + i + " " + patternFitness);
+            System.out.println("P " + pattern.centers[i] + " " + pattern.numSpacesPattern[i] + " " + pattern.numFlaggedPattern[i] + " " + i + " " + patternFitness);
           }
           
           if(patternFitness < 0)  {
@@ -216,11 +216,15 @@ private static final int FRONTIERNEIGHBORS = 1;
        double [] compared = comparePattern(pattern, boardCenter,boardSpaces,boardFlags);
        for(int i = 0; i < NUMPATTERNS; i++)  {
           currPF = compared[i];
+
+          //System.out.println("minPatternFitness" + minPF + " " + currPF + " " + currIndex + " " + minIndex + " ");
           if(currPF<minPF)  {
              minPF = currPF;
              minIndex = currIndex;
-             currIndex++;
+             
+             System.out.println("minPatternFitness" + minPF + " " + currPF + " " + currIndex + " " + minIndex + " " + i);
           }
+          currIndex++;
 
        }
        
@@ -239,6 +243,7 @@ private static final int FRONTIERNEIGHBORS = 1;
         boolean hitBomb = false;
 
         int action = chromoPatterns[bestPatternIndex + 9];
+        System.out.println(action + " action");
         if(action == 1)  {
             game.flag(x, y);
         } else  {
@@ -293,7 +298,11 @@ private static final int FRONTIERNEIGHBORS = 1;
                 int[] nInfo = getNeighborsInfo(game, i,j);
                 double[] fitnessInfo = minPatternFitness(pattern, nInfo[0],nInfo[1],nInfo[2]);
                 double minPatFitness = fitnessInfo[0];
+
                 int minPatFitnessIndex = (int)fitnessInfo[1];
+                if(minPatFitness < 1){
+                	System.out.println("coords " + i + " " + j + " " + minPatFitnessIndex);
+                }
 
                 // System.out.println("minPatFitness " + minPatFitness);
                 // System.out.println("minPatFitnessIndex " + minPatFitnessIndex);
