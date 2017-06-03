@@ -51,7 +51,7 @@ public class MineSweeper  {
         }
     }
     
-    /*
+    /**
      * Reveales the blob of zeros
      * Also revealed the nonzeros around said blob.
      */
@@ -114,7 +114,7 @@ public class MineSweeper  {
      }
 
     /**
-     * clicks on a random unshown square
+     * Clicks on a random unshown square.
      * @return if was successful. Fails if entire board is modified.
      */
     public boolean clickOnRandomUnmodifiedSq(Random rand)  {
@@ -158,6 +158,15 @@ public class MineSweeper  {
         numMinesLeft += curr.flagged? 1: -1;
     }
 
+    private static void shuffleList(Pair[] toShuffle, Random rand)  {
+        for(int i = 0; i < toShuffle.length; i++)  {
+            int shuffleIndex = rand.nextInt(toShuffle.length);
+            Pair temp = toShuffle[shuffleIndex];
+            toShuffle[shuffleIndex] = toShuffle[i];
+            toShuffle[i] = temp;
+        }
+    }
+
     /**
      * Make a minesweeper board
      * @param sideLen The length of a given side.
@@ -167,13 +176,21 @@ public class MineSweeper  {
         numTurns = 0;
         board = new Square[sideLen][sideLen];
         Random mineLocGen = new Random();
-        TreeSet<Pair> coords = new TreeSet<Pair>();
         numMinesLeft = numMines;
         
-        while(coords.size() < numMines)  {
-            coords.add(new Pair(mineLocGen.nextInt(sideLen),
-                                mineLocGen.nextInt(sideLen)));
+        Pair[] coords = new Pair[sideLen*sideLen];
+        
+        int coordIndex = 0;
+        for(int i = 0; i < sideLen; i++)  {
+            for(int j = 0; j < sideLen; j++)  {
+                coords[coordIndex] = new Pair(i, j);
+                coordIndex++;
+            }
         }
+        System.out.println(Arrays.toString(coords));
+
+        shuffleList(coords, mineLocGen);
+        System.out.println("DONE WITH ADDING MINES TO COORDS");
         
         // fill every board with a blank square
         for(int i = 0; i < sideLen; i++)  {
@@ -184,7 +201,8 @@ public class MineSweeper  {
 
         // fills each bomb square with a -1
         // increments all squares around them
-        for(Pair p: coords)  {
+        for(int k = 0; k < numMines; k++)  {
+            Pair p = coords[k];
             int x = p.fst;
             int y = p.snd;
             board[x][y].value = -1;

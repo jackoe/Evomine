@@ -333,6 +333,7 @@ private static final int FRONTIERNEIGHBORS = 1;
      * @return the fitness
      */
     private static MineSweeper playGame(int[] chromoPatterns)  {
+        System.out.println("PLAYGAME");
         // modulate the patterns to be <8, <2 .etc
         for (int i = 0; i < chromoPatterns.length; i++) {
                 modArr(i, chromoPatterns);
@@ -342,6 +343,7 @@ private static final int FRONTIERNEIGHBORS = 1;
         MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
         boolean hitBomb = false;
         game.clickOnAZero();
+       
         // game.printBoard(false);
 
         for (int i = 0; i < 90 && !hitBomb; i++) {
