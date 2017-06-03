@@ -122,7 +122,7 @@ public class MineSweeper  {
         for(int i = 0; i < board.length; i++)  {
             for(int j = 0; j < board.length; j++)  {
                 Square sq = get(i,j);
-                if(!sq.shown || sq.flagged)  {
+                if(sq.shown && !sq.flagged)  {
                     squares.add(sq);
                 }
             }
