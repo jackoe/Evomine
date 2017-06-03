@@ -203,7 +203,6 @@ private static final int FRONTIERNEIGHBORS = 1;
              patternFitness = 2;
           }
           patternFitnesses[i] = patternFitness;
-          
        }
        return patternFitnesses;
 
@@ -234,19 +233,23 @@ private static final int FRONTIERNEIGHBORS = 1;
 
 
     private static boolean actOnBestSquare(MineSweeper game, int[] chromoPatterns, int bestPatternIndex, int x, int y)  {
-      boolean hitBomb = false;
+        if(x == -1 || y == -1)  {
+            return game.clickOnRandomUnmodifiedSq(RandomRegistry.getRandom());
+        }
+        boolean hitBomb = false;
 
-      int action = chromoPatterns[bestPatternIndex + 9];
-       if(action == 1)  {
-         game.flag(x, y);
-      } else  {
-         hitBomb = game.peek(x, y) == -1;
-      }
-      return hitBomb;
+        int action = chromoPatterns[bestPatternIndex + 9];
+        if(action == 1)  {
+            game.flag(x, y);
+        } else  {
+            hitBomb = game.peek(x, y) == -1;
+        }
+        return hitBomb;
     }
 
 
     private static int getAdjacentSquareData(MineSweeper game, int x, int y, int[] spacesX, int[] spacesY)  {
+
          int spaceIndex = 0;
          for(int a = -1; a < 2; a++)  {
              for(int b = -1; b < 2; b++)  {
@@ -331,13 +334,13 @@ private static final int FRONTIERNEIGHBORS = 1;
         MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
         boolean hitBomb = false;
         game.clickOnAZero();
-        game.printBoard();
+        // game.printBoard(false);
 
         for (int i = 0; i < 90 && !hitBomb; i++) {
             hitBomb = makeMove(game, chromoPatterns, pattern);
         }
 
-        game.printBoard(false);
+        // game.printBoard(false);
 
         return game;
     }

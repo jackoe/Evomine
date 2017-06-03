@@ -114,6 +114,30 @@ public class MineSweeper  {
      }
 
     /**
+     * clicks on a random unshown square
+     * @return if was successful. Fails if entire board is modified.
+     */
+    public boolean clickOnRandomUnmodifiedSq(Random rand)  {
+        LinkedList<Square> squares = new LinkedList();
+        for(int i = 0; i < board.length; i++)  {
+            for(int j = 0; j < board.length; j++)  {
+                Square sq = get(i,j);
+                if(!sq.shown || sq.flagged)  {
+                    squares.add(sq);
+                }
+            }
+        }
+        if(squares.size() > 0)  {
+            Square sq = squares.get(rand.nextInt(squares.size()));
+            sq.shown = true;
+            numTurns++;
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * flags a mine
      * @param x the x coord
      * @param y the y coord
