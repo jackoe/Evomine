@@ -27,7 +27,7 @@ import org.jenetics.util.RandomRegistry;
 public class EvoMine {
 private static final int NUMGAMES = 10;
 private static final int BOARDSIZE = 8;
-private static final int NUMMINES = 20;
+private static final int NUMMINES = 10;
 private static final int NUMPATTERNS = 700;
 private static final int FITNESSTYPE = 0;
 private static final int NUMGENERATIONS = 300;
