@@ -249,7 +249,6 @@ private static final int FRONTIERNEIGHBORS = 1;
 
 
     private static int getAdjacentSquareData(MineSweeper game, int x, int y, int[] spacesX, int[] spacesY)  {
-
          int spaceIndex = 0;
          for(int a = -1; a < 2; a++)  {
              for(int b = -1; b < 2; b++)  {
@@ -316,7 +315,7 @@ private static final int FRONTIERNEIGHBORS = 1;
             }
         }
         boolean hitBomb = actOnBestSquare(game, chromoPatterns, bestPatternIndex, evalX, evalY);
-        //game.printBoard(false);
+        game.printBoard(false);
         return hitBomb;
     }
 
@@ -418,7 +417,7 @@ private static final int FRONTIERNEIGHBORS = 1;
         while(showThreeGames)  {
             evalMaybePrint(result, 3, true);
             System.out.print("Show three more games?");
-            showThreeGames = in.nextLine().toUpperCase().charAt(0) == 'T';
+            showThreeGames = in.nextLine().toUpperCase().charAt(0) == 'Y';
         }   
     }
 }
