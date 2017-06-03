@@ -327,6 +327,63 @@ private static double[] selectPattern2(MineSweeper game, int x, int y, int[] arr
 		MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
 		boolean hitBomb = false;
         game.clickOnAZero();
+        game.printBoard(false);
+        for(int i = 0; i < BOARDSIZE; i++)  {
+                for(int j = 0; j < BOARDSIZE; j++)  {
+                    if(game.get(i,j).flagged || !game.get(i,j).shown || !isFrontier(game,i,j))  {
+                        continue;
+
+                    }
+                    	int spaceIndex = 0;
+                    	int [] spacesX = new int [8];
+        				int [] spacesY = new int [8];
+        				for(int o=0; o<8; o++)  {
+            				spacesX[o] = -1;
+            				spacesY[o] = -1;
+            			}  
+
+                    	for(int a = -1; a < 2; a++)  {
+            				for(int b = -1; b < 2; b++)  {
+               					if (!game.inBounds(i+a, b+j)||(i == 0 && j == 0) )  {
+            						continue;
+                    				}
+                    			//Square sq = game.get(i+a, j+b);
+                				int actualSquareValue = squareToInt(game.get(i + a, j + b));
+                				if(actualSquareValue == -2){
+                					spacesX[spaceIndex] = i+a;
+            						spacesY[spaceIndex] = b+j;
+            						spaceIndex++;  
+
+                					System.out.println("squareInfo value " + actualSquareValue + " xCoord " + (i+a) + " yCoord " + (b+j));
+                					for(int t= 0; t< 8; t++)  {
+		                				System.out.println("Spaces" + spacesX[t] + " " + spacesY[t]);
+
+		                			}
+                				}
+
+                				int spaceSelector = RandomRegistry.getRandom().nextInt(spaceIndex+1);
+		                		int randTest = RandomRegistry.getRandom().nextInt(2);
+		                		int evalX = spacesX[spaceSelector];
+		                		int evalY = spacesY[spaceSelector];
+
+		                		if(randTest == 1){
+		                			game.flag(evalX, evalY);
+		                			game.printBoard(false);
+		                		}
+		                		game.peek(evalX, evalY);
+		                		game.printBoard(false);
+                				
+            					//if (!sq.flagged && !sq.shown && actualSquareValue == -2)  {
+            					//	spacesX[spaceIndex] = i+a;
+            					//	spacesY[spaceIndex] = b+j;
+            					//	spaceIndex++;       	
+                    			}
+                    		}		
+
+                   // System.out.println("Frontier Coords " + i + " , " + j);
+                }
+            }    
+
         return game;
 
     	}
