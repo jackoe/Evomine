@@ -7,21 +7,31 @@ import java.util.List;
 
 public class MineSweeper  {
 
-    // the board
+    /** the board
+     */
     private Square[][] board;
+    /** number of mines left
+     */
     public int numMinesLeft;
+    /** number of turns taken
+     */
     public int numTurns;
 
-    /*
-     * Retuns the square object if it's accessible:
+    /**
+     * Returns the square object if it's accessible:
      * null otherwise
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the Square object at that location, or null if out of bounds.
      */
     public Square get(int x, int y)  {
         return inBounds(x,y) ? board[x][y]: null;
     }
 
-    /*
-     * Returns true if x and y are in bounds.
+    /**
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return true if x and y are in bounds.
      * false otherwise
      */
     public boolean inBounds(int x, int y)  {
@@ -30,8 +40,10 @@ public class MineSweeper  {
             && x >= 0
             && y >= 0;
     }
-    /*
+    /**
      * Increments a square at an index if it's in bounds
+     * @param x the x coordinate
+     * @param y the y coordinate
      */
     private void safeIncBoard(int x, int y)  {
         if(inBounds(x, y) && board[x][y].value >= 0)  {
@@ -65,7 +77,9 @@ public class MineSweeper  {
             }
         }
     }
-
+    /** 
+     * @return the number of squares that have been revealed
+     */
     public int numRevealed()  {
         int numRevealedCount = 0;
         for(int i = 0; i < board.length; i++)  {
@@ -76,8 +90,11 @@ public class MineSweeper  {
         return numRevealedCount;
     }
 
-    /* 
+    /**
      * Click on a square
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the value of the square (-1 if mine)
      */
     public int peek(int x, int y)  {
         if(!inBounds(x, y))  {
@@ -92,7 +109,8 @@ public class MineSweeper  {
         
         return peekingAt.value;
      }
-    /*
+
+    /**
      * flags a mine
      * @param x the x coord
      * @param y the y coord
@@ -113,7 +131,7 @@ public class MineSweeper  {
         numMinesLeft += curr.flagged? 1: -1;
     }
 
-    /*
+    /**
      * Make a minesweeper board
      * @param sideLen The length of a given side.
      * @param numMines The number of mines.
@@ -158,8 +176,9 @@ public class MineSweeper  {
         System.out.println("");
     }
 
-    /* 
+    /**
      * prints the board
+     * @param show whether or not user wants all mines to be shown or just the revealed ones.
      */
     public void printBoard(boolean show)  {
         System.out.println("");
@@ -175,8 +194,9 @@ public class MineSweeper  {
         //printHyphenLine();
         System.out.println("number of turns = " + numTurns);
     }
-    /*
+    /**
      * Calculates fitness by #true flags - #false flags
+     * @return a fitness score
      */
     public int fitnessCalc(){
         int fitness = 0;
@@ -196,8 +216,8 @@ public class MineSweeper  {
         return fitness;
     }
    
-    /*
-    * Plays the game.
+    /**
+    * Plays the game from the user
     */
     public static void play()  {
         MineSweeper game = new MineSweeper(8, 10);
@@ -232,7 +252,10 @@ public class MineSweeper  {
         game.printBoard(true);
         System.out.println("Fitness: " + game.fitnessCalc());
     }
-
+    
+    /**
+     * Plays the game with our hand-written AI
+     */
     public static void play2() {
         MineSweeper game = new MineSweeper(8, 10);
         int lastClick = 0;
@@ -294,6 +317,10 @@ public class MineSweeper  {
         System.out.println("Fitness: " + game.fitnessCalc());
     }
 
+    /**
+     * Clicks on a zero.
+     * This is intended to be used when just starting out so that we don't always start out with a blank board.
+     */
     public void clickOnAZero()  {
         for(int i = 0; i < board.length; i++)  {
             for(int j = 0; j < board.length; j++)  {
@@ -306,7 +333,7 @@ public class MineSweeper  {
         }
     }
 
-    public void check1(int d, int e) {
+    private void check1(int d, int e) {
         int b = 0;
         for (Square sq : getNeighBors(d,e)) {
             if(sq.shown) {
@@ -323,6 +350,12 @@ public class MineSweeper  {
             }
         }  
     }    
+
+    /**
+     * @param x the x coord
+     * @param y the y coord
+     * @return a list of your neighbors
+     */
     public List<Square>getNeighBors(int x, int y)  {
         List<Square> neighbors = new LinkedList<Square>();
         for(int i = -1; i < 2; i++)  {
@@ -337,7 +370,10 @@ public class MineSweeper  {
     }
 
     
-
+    /**
+     * Right now just plays a game with the user
+     * @param args the command line arguements, not used
+     */
     public static void main(String[] args)  {
         play();
     }
@@ -378,7 +414,10 @@ public class MineSweeper  {
             return 0;
 
         }
-
+        
+        /**
+         * @return the pair into a string
+         */
         public String toString()  {
             return "(" + fst + ", " + snd + ")";
         }

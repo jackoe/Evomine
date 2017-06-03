@@ -25,7 +25,9 @@
         public String toString(boolean ignoreShown)  {
             boolean show = shown || ignoreShown;
             
-            if(flagged)
+            if(flagged && shown)
+                return "%";
+            else if(flagged)
                 return "F";
             else if(shown && value == -1)
                 return "#";
