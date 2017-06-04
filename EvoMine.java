@@ -410,7 +410,7 @@ private static final int FRONTIERNEIGHBORS = 1;
         Engine<IntegerGene, Double> engine = Engine
             .builder(EvoMine::eval, gtf)
             .maximizing()
-            .selector(new TournamentSelector(8))
+            .selector(new StochasticUniversalSelector())
             .populationSize(POPSIZE)
             .build();
         
