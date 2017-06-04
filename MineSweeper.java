@@ -187,10 +187,8 @@ public class MineSweeper  {
                 coordIndex++;
             }
         }
-        System.out.println(Arrays.toString(coords));
 
         shuffleList(coords, mineLocGen);
-        System.out.println("DONE WITH ADDING MINES TO COORDS");
         
         // fill every board with a blank square
         for(int i = 0; i < sideLen; i++)  {
@@ -258,7 +256,6 @@ public class MineSweeper  {
                 }
             }
         }
-        System.out.println("game fitness " + fitness);
         return fitness;
     }
    
@@ -344,7 +341,7 @@ public class MineSweeper  {
 
                         
                         System.out.println("Hello Hello Hello");
-                        for(int c=0; c<64;c++){
+                        for(int c = 0; c < 64; c++){
                             System.out.println("Hello");
                             if(frontier[c]){
                                 System.out.println("Frontier List"+ c);

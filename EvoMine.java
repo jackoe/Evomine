@@ -194,9 +194,9 @@ private static final int FRONTIERNEIGHBORS = 1;
           if(pattern.centers[i]           == boardCenter 
           && pattern.numSpacesPattern[i]  == boardSpaces 
           && pattern.numFlaggedPattern[i] == boardFlags) {
-             patternFitness = (pattern.centers[i] - pattern.numFlaggedPattern[i]) / pattern.numSpacesPattern[i];
-            System.out.println("B " + boardCenter + " " + boardSpaces + " " + boardFlags + " " + i + " " + patternFitness);
-            System.out.println("P " + pattern.centers[i] + " " + pattern.numSpacesPattern[i] + " " + pattern.numFlaggedPattern[i] + " " + i + " " + patternFitness);
+             patternFitness = pattern.numSpacesPattern[i] == 0? 2: (pattern.centers[i] - pattern.numFlaggedPattern[i]) / pattern.numSpacesPattern[i];
+            //System.out.println("B " + boardCenter + " " + boardSpaces + " " + boardFlags + " " + i + " " + patternFitness);
+            //System.out.println("P " + pattern.centers[i] + " " + pattern.numSpacesPattern[i] + " " + pattern.numFlaggedPattern[i] + " " + i + " " + patternFitness);
           }
           
           if(patternFitness < 0)  {
@@ -222,7 +222,7 @@ private static final int FRONTIERNEIGHBORS = 1;
              minPF = currPF;
              minIndex = currIndex;
              
-             System.out.println("minPatternFitness" + minPF + " " + currPF + " " + currIndex + " " + minIndex + " " + i);
+             //System.out.println("minPatternFitness" + minPF + " " + currPF + " " + currIndex + " " + minIndex + " " + i);
           }
           currIndex++;
 
@@ -243,7 +243,7 @@ private static final int FRONTIERNEIGHBORS = 1;
         boolean hitBomb = false;
 
         int action = chromoPatterns[bestPatternIndex + 9];
-        System.out.println(action + " action");
+        //System.out.println(action + " action");
         if(action == 1)  {
             game.flag(x, y);
         } else  {
@@ -301,7 +301,7 @@ private static final int FRONTIERNEIGHBORS = 1;
 
                 int minPatFitnessIndex = (int)fitnessInfo[1];
                 if(minPatFitness < 1){
-                	System.out.println("coords " + i + " " + j + " " + minPatFitnessIndex);
+                	//System.out.println("coords " + i + " " + j + " " + minPatFitnessIndex);
                 }
 
                 // System.out.println("minPatFitness " + minPatFitness);
@@ -324,7 +324,7 @@ private static final int FRONTIERNEIGHBORS = 1;
             }
         }
         boolean hitBomb = actOnBestSquare(game, chromoPatterns, bestPatternIndex, evalX, evalY);
-        game.printBoard(false);
+        //game.printBoard(false);
         return hitBomb;
     }
 
@@ -333,7 +333,6 @@ private static final int FRONTIERNEIGHBORS = 1;
      * @return the fitness
      */
     private static MineSweeper playGame(int[] chromoPatterns)  {
-        System.out.println("PLAYGAME");
         // modulate the patterns to be <8, <2 .etc
         for (int i = 0; i < chromoPatterns.length; i++) {
                 modArr(i, chromoPatterns);
@@ -367,7 +366,6 @@ private static final int FRONTIERNEIGHBORS = 1;
             chromoPattern[i] = num.intValue();
             i++;
         }
-
         int sumFitnesses = 0;
 
         for(int j = 0; j < numEvalGames; j++)  {
@@ -380,9 +378,9 @@ private static final int FRONTIERNEIGHBORS = 1;
                     sumFitnesses += game.numTurns;
                     break;
             }
-            //if(printGames)  {
-               // game.printBoard(false);
-           // }
+            if(printGames)  {
+               game.printBoard(false);
+            }
         }
 
         return sumFitnesses;
