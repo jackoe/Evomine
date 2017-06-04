@@ -23,14 +23,15 @@ import org.jenetics.TournamentSelector;
 import java.util.Scanner;
 import java.util.Arrays;
 import org.jenetics.util.RandomRegistry;
+import org.jenetics.StochasticUniversalSelector;
 
 public class EvoMine {
-private static final int NUMGAMES = 100;
+private static final int NUMGAMES = 10;
 private static final int BOARDSIZE = 8;
 private static final int NUMMINES = 10;
-private static final int NUMPATTERNS = 700;
+private static final int NUMPATTERNS = 100;
 private static final int FITNESSTYPE = 0;
-private static final int NUMGENERATIONS = 300;
+private static final int NUMGENERATIONS = 100;
 private static final int POPSIZE = 100;
 private static final int FRONTIERNEIGHBORS = 1;
 
@@ -253,7 +254,7 @@ private static final int FRONTIERNEIGHBORS = 1;
 
         int action = chromoPatterns[bestPatternIndex + 9];
         //System.out.println(action + " action");
-        if(action == 1)  {
+        if(action == 1 && FITNESSTYPE == 0)  {
             game.flag(x, y);
         } else  {
             hitBomb = game.peek(x, y) == -1;
@@ -368,7 +369,7 @@ private static final int FRONTIERNEIGHBORS = 1;
      * The eval function, takes a genetic thing,
      * outputs a fitness
      */
-    private static Integer evalMaybePrint(Genotype<IntegerGene> gt, int numEvalGames, boolean printGames)  {
+    private static Double evalMaybePrint(Genotype<IntegerGene> gt, int numEvalGames, boolean printGames)  {
         int[] chromoPattern = new int[11 * NUMPATTERNS];
         int i = 0;
         for(IntegerGene num : gt.getChromosome())  {
@@ -392,10 +393,10 @@ private static final int FRONTIERNEIGHBORS = 1;
             }
         }
 
-        return sumFitnesses;
+        return (sumFitnesses + 0.0) / numEvalGames;
     }
 
-    private static Integer eval(Genotype<IntegerGene> gt)  {
+    private static Double eval(Genotype<IntegerGene> gt)  {
         return evalMaybePrint(gt, NUMGAMES, false);
     }
 
@@ -410,14 +411,14 @@ private static final int FRONTIERNEIGHBORS = 1;
         }
 
         // 3.) Create the execution environment.
-        Engine<IntegerGene, Integer> engine = Engine
+        Engine<IntegerGene, Double> engine = Engine
             .builder(EvoMine::eval, gtf)
             .maximizing()
-            .selector(new TournamentSelector(4))
+            .selector(new TournamentSelector(8))
             .populationSize(POPSIZE)
             .build();
         
-        final EvolutionStatistics<Integer, DoubleMomentStatistics> statistics = EvolutionStatistics.ofNumber();
+        final EvolutionStatistics<Double, DoubleMomentStatistics> statistics = EvolutionStatistics.ofNumber();
 
         // 4.) Start the execution (evolution) and
         //     collect the result.

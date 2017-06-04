@@ -248,15 +248,15 @@ public class MineSweeper  {
                 Square curr = board[i][j];
                 if (board[i][j].flagged) {
                     if (board[i][j].value == -1) {
-                        fitness++;
+                        fitness ++;
                     }
                     else {
-                        fitness-=1.5;
+                        fitness -= 1.5;
                     }    
                 }
             }
         }
-        return fitness;
+        return fitness + board.length * board.length;
     }
    
     /**
@@ -269,7 +269,6 @@ public class MineSweeper  {
         int x,y;
         
         while(lastClick != -1)  {
-            
             // get input from user
             System.out.println(game.numMinesLeft + " Mines Remaining");
             game.printBoard(false);
