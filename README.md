@@ -1,6 +1,6 @@
 # EvoMine
 	Sam Orfield && Jack Wines
-Clicking is boring, evolve something to do it for you
+Clicking is boring, evolve something to do it for you. This is not the writeup. Please see WRITEUP.PDF for the final writeup.
 ### Compile with
 ```
 javac MineSweeper.java -cp ../Evomine
