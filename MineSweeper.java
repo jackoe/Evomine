@@ -112,28 +112,49 @@ public class MineSweeper  {
         
         return peekingAt.value;
      }
-
-    /**
-     * Clicks on a random unshown square.
-     * @return if was successful. Fails if entire board is modified.
-     */
-    public boolean clickOnRandomUnmodifiedSq(Random rand)  {
+    
+    public List<Square> getListOfRandomUnmmodifiedSq()  {
         LinkedList<Square> squares = new LinkedList();
         for(int i = 0; i < board.length; i++)  {
             for(int j = 0; j < board.length; j++)  {
                 Square sq = get(i,j);
-                if(sq.shown && !sq.flagged)  {
+                if(!sq.shown && !sq.flagged)  {
                     squares.add(sq);
                 }
             }
         }
+        return squares;
+    }
+
+
+    /**
+     * flags a random unshown square.
+     * @return if was successful. Fails if entire board is modified.
+     */
+    public boolean flagARandomUnmodifiedSq(Random rand)  {
+        List<Square> squares = getListOfRandomUnmmodifiedSq();
+        if(squares.size() > 0)  {
+            Square sq = squares.get(rand.nextInt(squares.size()));
+            sq.flagged = true;
+            numTurns++;
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Clicks on a random unshown square.
+     * @return if was successful. Fails if entire board is modified or bomb.
+     */
+    public boolean clickOnRandomUnmodifiedSq(Random rand)  {
+        List<Square> squares = getListOfRandomUnmmodifiedSq();
         if(squares.size() > 0)  {
             Square sq = squares.get(rand.nextInt(squares.size()));
             sq.shown = true;
             numTurns++;
-            return true;
+            return sq.value == -1;
         }
-        return false;
+        return true;
     }
 
 

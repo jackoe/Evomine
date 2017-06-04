@@ -24,16 +24,24 @@ import java.util.Scanner;
 import java.util.Arrays;
 import org.jenetics.util.RandomRegistry;
 import org.jenetics.StochasticUniversalSelector;
+import java.util.Random;
 
 public class EvoMine {
+// number of games each individual plays each generation
 private static final int NUMGAMES = 100;
+// the length of one side of the board
 private static final int BOARDSIZE = 8;
+// the number of mines on said board
 private static final int NUMMINES = 10;
+// the number of patterns in each indivdual
 private static final int NUMPATTERNS = 250;
+// 0 for # correctly flagged mines - #incorrectly flagged spaces
+// 1 for percentage of board revealed
 private static final int FITNESSTYPE = 0;
+// number of generations to run this for
 private static final int NUMGENERATIONS = 250;
+// population size
 private static final int POPSIZE = 100;
-private static final int FRONTIERNEIGHBORS = 1;
 
 
 
@@ -401,7 +409,42 @@ private static final int FRONTIERNEIGHBORS = 1;
         return evalMaybePrint(gt, NUMGAMES, false);
     }
 
+    private static boolean randomMove(MineSweeper game, Random rand)  {
+        if(rand.nextBoolean())  {
+            System.out.println("flagging");
+            return game.flagARandomUnmodifiedSq(rand);
+        } else  {
+            System.out.println("clicking");
+            return game.clickOnRandomUnmodifiedSq(rand);
+        }
+        
+    }
+
+    /**
+     * Returns the average fitness if we clicked randomly
+     */
+    private static double randomTests()  {
+        Random rand = new Random();
+        double fitness = 0;
+        for(int i = 0; i < NUMGAMES; i++)  {
+            boolean hitBomb = false;
+            MineSweeper game = new MineSweeper(BOARDSIZE, NUMMINES);
+            while(!hitBomb)  {
+                hitBomb = randomMove(game, rand);
+            }
+            fitness += game.fitnessCalc();
+            game.printBoard(false);
+        }
+        return fitness / NUMGAMES;
+    }
+
     public static void main(String[] args)  {
+        if(args.length >= 1 && args[1].equalsIgnoreCase("Baseline"))  {
+            System.out.println("random tests: " + randomTests());
+            return;
+        }
+        
+
         // 1.) Define the genotype (factory) suitable
         //     for the problem.
         Factory<Genotype<IntegerGene>> gtf = Genotype.of(IntegerChromosome.of(0,24, 11 * NUMPATTERNS));
@@ -410,7 +453,7 @@ private static final int FRONTIERNEIGHBORS = 1;
         Engine<IntegerGene, Double> engine = Engine
             .builder(EvoMine::eval, gtf)
             .maximizing()
-            .selector(new StochasticUniversalSelector())
+            .selector(new TournamentSelector(8))
             .populationSize(POPSIZE)
             .build();
         
@@ -426,15 +469,16 @@ private static final int FRONTIERNEIGHBORS = 1;
         System.out.println(statistics);
         //System.out.println("top result: " + result);
         
-        /*
+        
         Scanner in = new Scanner(System.in);
         
         boolean showThreeGames = true;
         while(showThreeGames)  {
             evalMaybePrint(result, 3, true);
-            System.out.print("Show three more games?");
+            System.out.print("Show three more games? [y]es/[n]o: ");
             showThreeGames = in.nextLine().toUpperCase().charAt(0) == 'Y';
         }   
-        */
+        
+        
     }
 }
