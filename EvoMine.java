@@ -26,12 +26,12 @@ import org.jenetics.util.RandomRegistry;
 import org.jenetics.StochasticUniversalSelector;
 
 public class EvoMine {
-private static final int NUMGAMES = 10;
+private static final int NUMGAMES = 100;
 private static final int BOARDSIZE = 8;
 private static final int NUMMINES = 10;
-private static final int NUMPATTERNS = 100;
+private static final int NUMPATTERNS = 250;
 private static final int FITNESSTYPE = 0;
-private static final int NUMGENERATIONS = 100;
+private static final int NUMGENERATIONS = 250;
 private static final int POPSIZE = 100;
 private static final int FRONTIERNEIGHBORS = 1;
 
@@ -168,6 +168,7 @@ private static final int FRONTIERNEIGHBORS = 1;
        }
        return pattern;
     }
+
 
     private static int[] getNeighborsInfo(MineSweeper game, int i, int j)  {
        int tempBoardSpaces =0;
@@ -400,15 +401,14 @@ private static final int FRONTIERNEIGHBORS = 1;
         return evalMaybePrint(gt, NUMGAMES, false);
     }
 
+    public static EvolutionStatistics<Double, DoubleMomentStatistics> run(Engine<Integer> engine, numGenerations)  {
+        
+    }
+
     public static void main(String[] args)  {
         // 1.) Define the genotype (factory) suitable
         //     for the problem.
-        Factory<Genotype<IntegerGene>> gtf = null;
-        if (FRONTIERNEIGHBORS == 0)  {
-            gtf = Genotype.of(IntegerChromosome.of(-1,9, 9 * NUMPATTERNS));
-        }  else {
-            gtf = Genotype.of(IntegerChromosome.of(0,24, 11 * NUMPATTERNS));
-        }
+        Factory<Genotype<IntegerGene>> gtf = Genotype.of(IntegerChromosome.of(0,24, 11 * NUMPATTERNS));
 
         // 3.) Create the execution environment.
         Engine<IntegerGene, Double> engine = Engine
@@ -429,7 +429,8 @@ private static final int FRONTIERNEIGHBORS = 1;
         
         System.out.println(statistics);
         //System.out.println("top result: " + result);
-
+        
+        /*
         Scanner in = new Scanner(System.in);
         
         boolean showThreeGames = true;
@@ -438,5 +439,6 @@ private static final int FRONTIERNEIGHBORS = 1;
             System.out.print("Show three more games?");
             showThreeGames = in.nextLine().toUpperCase().charAt(0) == 'Y';
         }   
+        */
     }
 }
