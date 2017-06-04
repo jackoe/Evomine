@@ -401,10 +401,6 @@ private static final int FRONTIERNEIGHBORS = 1;
         return evalMaybePrint(gt, NUMGAMES, false);
     }
 
-    public static EvolutionStatistics<Double, DoubleMomentStatistics> run(Engine<Integer> engine, numGenerations)  {
-        
-    }
-
     public static void main(String[] args)  {
         // 1.) Define the genotype (factory) suitable
         //     for the problem.
