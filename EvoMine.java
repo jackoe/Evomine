@@ -25,13 +25,13 @@ import java.util.Arrays;
 import org.jenetics.util.RandomRegistry;
 
 public class EvoMine {
-private static final int NUMGAMES = 10;
+private static final int NUMGAMES = 100;
 private static final int BOARDSIZE = 8;
 private static final int NUMMINES = 10;
 private static final int NUMPATTERNS = 700;
 private static final int FITNESSTYPE = 0;
 private static final int NUMGENERATIONS = 300;
-private static final int POPSIZE = 10;
+private static final int POPSIZE = 100;
 private static final int FRONTIERNEIGHBORS = 1;
 
 
@@ -54,11 +54,14 @@ private static final int FRONTIERNEIGHBORS = 1;
     }
 
     private static void modArr(int index, int[] chromoPattern)  {       
-       if(index%10 == 4)  {
+       if(index%11 == 4)  {
           chromoPattern[index] = (chromoPattern[index]%8) + 1;
        }
-       if (index%10 == 9)  {
+       if (index%11 == 9)  {
           chromoPattern[index] = chromoPattern[index]%2;
+       if (index%11 == 10){
+       	chromoPattern[index] = (chromoPattern[index]);
+       }   
        } else  {
           chromoPattern[index] = chromoPattern[index]%3;
        }
@@ -118,10 +121,12 @@ private static final int FRONTIERNEIGHBORS = 1;
        pattern.centers = new int [NUMPATTERNS];
        pattern.numSpacesPattern = new int [NUMPATTERNS];
        pattern.numFlaggedPattern = new int [NUMPATTERNS];
+       pattern.selectors = new int [NUMPATTERNS];
 
        int [] centerIndicies = new int [NUMPATTERNS];
        int [] actions = new int [NUMPATTERNS];
        int [] actionIndicies = new int [NUMPATTERNS];
+       int [] selectorIndicies = new int [NUMPATTERNS];
 
 
        
@@ -129,16 +134,20 @@ private static final int FRONTIERNEIGHBORS = 1;
       int tempFlagged;
       
        for(int i=0; i<NUMPATTERNS; i++)  {
-          patternIndex = 10*i;
+          patternIndex = 11*i;
          pattern.centers[i] = arrPattern[patternIndex+4];
          centerIndicies[i] = patternIndex +4;
          actions[i] = arrPattern[patternIndex+9];
          actionIndicies[i] = patternIndex +9;
+         pattern.selectors[i] = arrPattern[patternIndex + 10];
+         actionIndicies[i] = patternIndex +10;
+
+
          tempSpaces =0;
          tempFlagged =0;
          
-         for(int j=0; j<10; j++)  {
-            if (j==4 || j==9)  {
+         for(int j=0; j<11; j++)  {
+            if (j==4 || j==9 || j==10)  {
                continue;
             }
             else if(arrPattern[i+j]==0)  {
@@ -230,7 +239,7 @@ private static final int FRONTIERNEIGHBORS = 1;
        
        
        compared[0] = minPF;
-       compared[1] = minIndex*10;
+       compared[1] = minIndex*11;
        return compared;
     }   
 
@@ -316,7 +325,7 @@ private static final int FRONTIERNEIGHBORS = 1;
                 if(minPatFitness < bestPatFitness)  {
                     bestPatternIndex = minPatFitnessIndex;
                     bestPatFitness = minPatFitness;
-                    int spaceSelector = RandomRegistry.getRandom().nextInt(spaceIndex);
+                    int spaceSelector = pattern.selectors[minPatFitnessIndex / 11] % spaceIndex;
                     evalX = spacesX[spaceSelector];
                     evalY = spacesY[spaceSelector];
                 }
@@ -360,7 +369,7 @@ private static final int FRONTIERNEIGHBORS = 1;
      * outputs a fitness
      */
     private static Integer evalMaybePrint(Genotype<IntegerGene> gt, int numEvalGames, boolean printGames)  {
-        int[] chromoPattern = new int[(FRONTIERNEIGHBORS == 1? 10: 9) * NUMPATTERNS];
+        int[] chromoPattern = new int[11 * NUMPATTERNS];
         int i = 0;
         for(IntegerGene num : gt.getChromosome())  {
             chromoPattern[i] = num.intValue();
@@ -397,7 +406,7 @@ private static final int FRONTIERNEIGHBORS = 1;
         if (FRONTIERNEIGHBORS == 0)  {
             gtf = Genotype.of(IntegerChromosome.of(-1,9, 9 * NUMPATTERNS));
         }  else {
-            gtf = Genotype.of(IntegerChromosome.of(0,24, 10 * NUMPATTERNS));
+            gtf = Genotype.of(IntegerChromosome.of(0,24, 11 * NUMPATTERNS));
         }
 
         // 3.) Create the execution environment.
@@ -418,7 +427,7 @@ private static final int FRONTIERNEIGHBORS = 1;
             .collect(EvolutionResult.toBestGenotype());
         
         System.out.println(statistics);
-        System.out.println("top result: " + result);
+        //System.out.println("top result: " + result);
 
         Scanner in = new Scanner(System.in);
         
